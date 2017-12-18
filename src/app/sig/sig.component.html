@@ -1,3 +1,20 @@
-<p>
-  sig works!
-</p>
+<div class="col-xs-12">
+  <form [formGroup]="sigForm"  
+        (ngSubmit)="onSubmit(sigForm.value)">
+
+    <div class="form-group">  
+      <label for="sigInput">Sig</label>  
+      <input formControlName="sigControl" 
+			 type="text"
+			 class="form-control"
+             id="sigControl"  
+             placeholder="Sig">  
+    </div>
+
+  </form>  
+
+Frequencies:
+
+  <pre *ngFor="let f of frequency">{{f | json}}</pre>
+
+</div>

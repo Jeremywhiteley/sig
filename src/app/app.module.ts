@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { SigComponent } from './sig/sig.component';
@@ -12,7 +13,9 @@ import { SigComponent } from './sig/sig.component';
     SigComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+	FormsModule,
+	ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
