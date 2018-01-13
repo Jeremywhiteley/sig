@@ -1,0 +1,143 @@
+gas for inhalation,inhale,puff,,
+inhalant solution,inhale,mL,,
+metered dose inhaler,inhale,puff,by mouth,26643006
+nasal inhalant,inhale,puff,nasally,46713006
+nasal inhaler,inhale,spray,nasally,46713006
+inhalant powder,inhale,puff,by mouth,26643006
+dry powder inhaler,inhale,puff,by mouth,26643006
+spray,spray,spray,,
+mucosal spray,spray,spray,,
+nasal spray,spray,spray,nasally,46713006
+oral spray,spray,spray,orally,26643006
+rectal spray,spray,spray,rectally,37161004
+topical spray,spray,spray,topically,6064005
+powder spray,spray,spray,topically,6064005
+vaginal spray,spray,spray,vaginally,16857009
+cream,apply,gram,,
+nasal cream,apply,gram,nasally,46713006
+ophthalmic cream,apply,gram,to the affected eye(s),54485002
+oral cream,apply,gram,orally,26643006
+otic cream,apply,gram,to the affected ear(s),10547007
+rectal cream,apply,gram,rectally,37161004
+topical cream,apply,gram,topically,6064005
+augmented topical cream,apply,gram,topically,6064005
+vaginal cream,apply,gram,vaginally,16857009
+foam,apply,mL,,
+oral foam,apply,mL,orally,26643006
+rectal foam,apply,mL,rectally,37161004
+topical foam,apply,mL,topically,6064005
+vaginal foam,apply,mL,vaginally,16857009
+liquid cleanser,apply,mL,,
+medicated liquid soap,apply,mL,,
+medicated shampoo,apply,mL,to the hair,6064005
+oil,apply,mL,,
+topical oil,apply,mL,topically,6064005
+prefilled applicator,apply,dose,,
+inhalant solution,inhale,mL,,
+injectable solution,inject,mL,,
+intraperitoneal solution,apply,mL,to the peritoneal cavity,38239002
+prefilled syringe,inject,mL,,
+irrigation solution,use,mL,,
+douche,use,mL,vaginally,16857009
+enema,use,mL,rectally,37161004
+ophthalmic irrigation solution,instill,drop,in the affected eye(s),54485002
+nasal solution,instill,drop,nasally,46713006
+ophthalmic solution,instill,drop,in the affected eye(s),54485002
+oral solution,instill,drop,orally,26643006
+mouthwash,rinse,mL,by mouth,26643006
+mucus membrane topical solution,apply,mL,,
+otic solution,instill,drop,to the affected ear(s),10547007
+topical solution,apply,mL,topically,6064005
+injectable suspension,inject,unit,into the muscle,78421000
+injectable suspension,inject,mL,into the muscle,78421000
+prefilled syringe,inject,unit,into the muscle,78421000
+prefilled syringe,inject,mL,into the muscle,78421000
+injectable suspension,inject,unit,under the skin,34206005
+injectable suspension,inject,mL,under the skin,34206005
+prefilled syringe,inject,unit,under the skin,34206005
+prefilled syringe,inject,mL,under the skin,34206005
+lotion,apply,mL,,
+topical lotion,apply,mL,topically,6064005
+augmented topical lotion,apply,mL,topically,6064005
+nasal suspension,instill,drops,nasally,46713006
+ophthalmic suspension,instill,drops,in the affected eye(s),54485002
+oral suspension,take,drops,by mouth,26643006
+extended release suspension,take,mL,by mouth,26643006
+otic suspension,instill,drops,in the affected ear(s),10547007
+solid,use,,,
+bar,use,bar,,
+bar soap,use,bar,topically,6064005
+medicated bar soap,use,bar,topically,6064005
+chewable bar,chew,gram,by mouth,26643006
+beads,use,gram,,
+cake,use,gram,,
+capsule,take,capsule,,
+oral capsule,take,capsule,by mouth,26643006
+enteric coated capsule,take,capsule,by mouth,26643006
+extended release enteric coated capsule,take,capsule,by mouth,26643006
+extended release oral capsule,take,capsule,by mouth,26643006
+delayed release oral tablet,take,tablet,by mouth,26643006
+extended release oral tablet,take,tablet,by mouth,26643006
+extended release capsule,take,capsule,by mouth,26643006
+extended release enteric coated capsule,take,capsule,by mouth,26643006
+cement,apply,gram,,
+chewing gum,chew,piece,by mouth,26643006
+crystals,use,gram,,
+disk,use,gram,,
+flakes,use,gram,,
+gel,apply,gram,,
+nasal gel,apply,gram,nasally,46713006
+oral gel,apply,gram,orally,26643006
+ophthalmic gel,apply,gram,in the affected eye(s),54485002
+rectal gel,apply,gram,rectally,37161004
+topical gel,apply,gram,topically,6064005
+augmented topical gel,apply,gram,topically,6064005
+urethral gel,apply,gram,in the urethra,90028008
+vaginal gel,apply,gram,vaginally,16857009
+granules,use,gram,,
+drug implant,insert,,,
+lozenge,dissolve,lozenge,by mouth,26643006
+medicated pad,use,pad,topically,6064005
+medicated tape,apply,tape,topically,6064005
+ointment,apply,gram,,
+nasal ointment,apply,gram,nasally,46713006
+ophthalmic ointment,apply,gram,in the affected eye(s),54485002
+oral ointment,apply,gram,orally,26643006
+otic ointment,apply,gram,in the affected ear(s),10547007
+rectal ointment,apply,gram,rectally,37161004
+topical ointment,apply,gram,topically,6064005
+augmented topical ointment,apply,gram,topically,6064005
+vaginal ointment,apply,gram,vaginally,16857009
+oral strip,dissolve,strip,by mouth,26643006
+buccal film,dissolve,film,by mouth,26643006
+paste,apply,gram,,
+oral paste,apply,gram,orally,26643006
+pudding,take,gram,by mouth,26643006
+toothpaste,use,gram,orally,26643006
+patch,apply,patch,topically,6064005
+transdermal patch,apply,patch,topically,6064005
+pellet,use,pellet,,
+powder,use,gram,,
+inhalant powder,inhale,gram,by mouth,26643006
+oral powder,take,gram,by mouth,26643006
+rectal powder,apply,gram,rectally,37161004
+topical powder,apply,gram,topically,6064005
+vaginal powder,apply,gram,vaginally,16857009
+suppository,insert,suppository,rectally,37161004
+rectal suppository,insert,suppository,rectally,37161004
+vaginal suppository,insert,suppository,vaginally,16857009
+urethral suppository,insert,suppository,in the urethra,90028008
+tablet,take,tablet,,
+oral tablet,take,tablet,by mouth,26643006
+buccal tablet,dissolve,tablet,by mouth,26643006
+sustained release buccal tablet,dissolve,tablet,by mouth,26643006
+chewable tablet,chew,tablet,by mouth,26643006
+disintegrating tablet,dissolve,tablet,by mouth,26643006
+enteric coated tablet,take,tablet,by mouth,26643006
+extended release enteric coated tablet,take,tablet,by mouth,26643006
+extended release tablet,take,tablet,by mouth,26643006
+extended release enteric coated tablet,take,tablet,by mouth,26643006
+sublingual tablet,dissolve,tablet,under the tongue,37839007
+vaginal tablet,insert,tablet,vaginally,16857009
+vaginal ring,insert,ring,vaginally,16857009
+wafer,take,wafer,,

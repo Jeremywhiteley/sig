@@ -6,7 +6,8 @@ import {
   Validators,  
   AbstractControl  
 } from '@angular/forms';
-import { FrequencyParser } from '../frequency-parser';
+import { FrequencyParser } from '../parsers/frequency-parser';
+import { DoseParser } from '../parsers/dose-parser';
 
 @Component({
   selector: 'app-sig',
@@ -16,12 +17,14 @@ import { FrequencyParser } from '../frequency-parser';
 export class SigComponent implements OnInit {
   sigForm: FormGroup;
   sigControl: AbstractControl;
+  
   sig: string;
   frequency: Array<any>;
+  dose: Array<any>;
 
   constructor(fb: FormBuilder) {
     this.sigForm = fb.group({
-      'sigControl':  '1 tablet by mouth three times a day for 7 days as needed for muscle spasms'
+      'sigControl':  'take 1-2 tablet by mouth every 4-6 h as needed for pain'
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
@@ -35,18 +38,11 @@ export class SigComponent implements OnInit {
 	this.updateSig(this.sigControl.value);
   }
 
-	frequencyParser(sig: string): any {
-      return sig.match(/(?:once daily|twice daily)/);
-    }
-
   	updateSig(sig: string): void {
 	  this.sig = sig;
-	 // this.frequency = this.frequencyParser(this.sig);
 	  this.frequency = new FrequencyParser(sig).frequencies;
-	  console.log(new FrequencyParser(sig));
-      console.log('sig changed to:', this.sigControl);  
-      console.log('frequency:', this.frequency);  
-	}
+	  this.dose = new DoseParser(sig).doses;
+  }
 
   ngOnInit() {
    }

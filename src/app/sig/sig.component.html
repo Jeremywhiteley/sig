@@ -13,8 +13,14 @@
 
   </form>  
 
-Frequencies:
+  <div>
+  Dose:
+  <pre *ngFor="let d of dose">{{d | json}}</pre>
+  </div>
 
+  <div>
+  Frequency:
   <pre *ngFor="let f of frequency">{{f | json}}</pre>
+  </div>
 
 </div>
