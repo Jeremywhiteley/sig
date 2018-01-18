@@ -12,15 +12,25 @@
     </div>
 
   </form>  
+</div>
 
-  <div>
+  <div class="col-xs-3">
   Dose:
   <pre *ngFor="let d of dose">{{d | json}}</pre>
   </div>
 
-  <div>
+  <div class="col-xs-3">
   Frequency:
   <pre *ngFor="let f of frequency">{{f | json}}</pre>
   </div>
 
-</div>
+  <div class="col-xs-3">
+  PRN:
+  <pre *ngFor="let p of prn">{{p | json}}</pre>
+  </div>
+
+  <div class="col-xs-3">
+  Duration:
+  <pre *ngFor="let d of duration">{{d | json}}</pre>
+  </div>
+

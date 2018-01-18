@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { FrequencyParser } from '../parsers/frequency-parser';
 import { DoseParser } from '../parsers/dose-parser';
+import { PrnParser } from '../parsers/prn-parser';
+import { DurationParser } from '../parsers/duration-parser';
 
 @Component({
   selector: 'app-sig',
@@ -19,12 +21,14 @@ export class SigComponent implements OnInit {
   sigControl: AbstractControl;
   
   sig: string;
-  frequency: Array<any>;
-  dose: Array<any>;
+  frequency: any[] = [];
+  dose: any[] = [];
+  prn: any[] = [];
+  duration: any[] = [];
 
   constructor(fb: FormBuilder) {
     this.sigForm = fb.group({
-      'sigControl':  'take 1-2 tablet by mouth every 4-6 h as needed for pain'
+      'sigControl':  '1 tablet (10 mg) by mouth every 6 hours for 14 days as needed for nausea and vomiting'
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
@@ -40,8 +44,16 @@ export class SigComponent implements OnInit {
 
   	updateSig(sig: string): void {
 	  this.sig = sig;
-	  this.frequency = new FrequencyParser(sig).frequencies;
-	  this.dose = new DoseParser(sig).doses;
+	  this.frequency = new FrequencyParser(sig).frequency;
+	  this.dose = new DoseParser(sig, this.frequency).dose;
+	  this.prn = new PrnParser(sig).prn;
+	  this.duration = new DurationParser(sig).duration;
+	  /*
+	  console.log('sig frequency', this.frequency);
+	  console.log('sig dose', this.dose);
+	  console.log('prn', this.prn);
+	  console.log('duration', this.duration);
+	  */
   }
 
   ngOnInit() {

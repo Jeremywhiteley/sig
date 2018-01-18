@@ -1,33 +1,33 @@
 export class FrequencyParser {
-  public frequencies: any[] = [];
+  public frequency: any[] = [];
   
   constructor(private sig: string) {
 	this.parse();
   }
   
   parse(): void {
-	this.getRegexFrequencyPatterns().forEach(regexFrequencyPattern => {
+	this.getPatterns().forEach(p => {
 		var match: any[] = [];
-		while (match = regexFrequencyPattern.pattern.exec(this.sig)) {
-			this.frequencies.push({
+		while (match = p.pattern.exec(this.sig)) {
+			this.frequency.push({
 				match: match,
-				standardized: regexFrequencyPattern.standardize(match)
+				standardized: p.standardize(match)
 			});
 		}
 	});
   }
   
-  getRegexFrequencyPatterns(): any[] {
+  getPatterns(): any[] {
 		var regexOneToTwentyfour: string = 'one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twentyone|twenty one|twenty-one|twentytwo|twenty two|twenty-two|twentythree|twenty three|twenty-three|twentyfour|twenty four|twenty-four';
 		// NOTE: keep the x-y at the beginning and x at the end so that it finds the x-y first without stopping
 		var regexRange: string = '(?:(?:' + regexOneToTwentyfour + '|\\d+)\\s*(?:to|-|or)\\s*(?:' + regexOneToTwentyfour + '|\\d+)|\\d+|(?:' + regexOneToTwentyfour + '))';
 		var regexDaysOfWeek: string = 'monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon\\b|tue\\b|tues\\b|wed\\b|thu\\b|thur\\b|thurs\\b|fri\\b|sat\\b|sun\\b|m\\b|tu\\b|w\\b|th\\b|t\\b|f\\b|sa\\b|su\\b|s\\b';
 
-		var regexFrequencyPatterns: any[] = [
+		var patterns: any[] = [
 		// bid | tid | qid
 		// bid-tid
 		// frequency = a (2 if b, 3 if t, 4 if q), period = 1, periodUnit = d
-		{ 	
+		{ 
 			pattern: new RegExp('(?:(?:\\s*(?:to|-|or)\\s*)?(b|t|q)\\.?i\\.?d\\b\\.?)+', 'ig'),
 			standardize: (match: any[]) => {
 				return {
@@ -46,7 +46,7 @@ export class FrequencyParser {
 		{
 			pattern: new RegExp('(?:q|every|each)\\s*(' + regexRange + ')\\s*(hours|days|weeks|h\\b|hrs\\b|hr\\b|min|mins)', 'ig'),
 			standardize: (match: any[]) => {
-				var period = match[1].replace(/to/ig, '-').replace(/\s/g, '').split('-');
+				var period = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				// TODO: normalize text numbers to integer numbers
 				// TODO: normalize hours / days / etc
 				return {
@@ -179,14 +179,12 @@ export class FrequencyParser {
 				
 		// x1 | x 1
 		// exclude if followed by: day | week | month
-		// frequency = 1, period = 1, periodUnit = d
+		// count = 1
 		{
-			pattern: new RegExp('x\\s*1(?!(?:day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b))', 'ig'),
+			pattern: new RegExp('(?:x\\s*1(?!(?:day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b))|one time only)', 'ig'),
 			standardize: (match: any[]) => {
 				return {
-					frequency: 1,
-					period: 1,
-					periodUnit: 'd'
+					count: 1
 				}
 			}
 		},
@@ -197,23 +195,15 @@ export class FrequencyParser {
 		// dayOfWeek = a
 		// ISSUE: only captures last day of multiple days (i.e. will only capture Friday for Monday, Wednesday, and Friday)
 		{
-			pattern: new RegExp('(?:every|on|q)\\s*(?:(' + regexDaysOfWeek + ')\\s*,?\\s*(?:and|&|\\+)?\\s*)+', 'ig'),
+			pattern: new RegExp('(?:every|on|q)\\s+(?:(' + regexDaysOfWeek + ')\\s*,?\\s*(?:and|&|\\+)?\\s*)+', 'ig'),
 			standardize: (match: any[]) => {
 				return {
 					dayOfWeek: match[1]
 				}
 			}
-		}
-/*
-		// qd | daily | nightly | weekly | monthly | one time only
-		// NOTE: hard code these? these are the oddballs
-		'(?:qd|one time only)'
-*/
-		];
+		},
 		
-		/* ISSUES
-			replace coming up undefined and causing downstream errors
-		*/
+		];		
 		
 		// on day(s)
 		// 1 | one | 1-2 | one to two | one-two
@@ -222,6 +212,6 @@ export class FrequencyParser {
 		// if length of a > 1, then duration = a[1] - a[0]; else duration = 1
 		//'on day(s)?\\s*(' + regexRange + ')',
 				
-	  return regexFrequencyPatterns;
+	  return patterns;
   }
 }
