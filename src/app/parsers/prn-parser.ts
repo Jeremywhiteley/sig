@@ -27,7 +27,8 @@ export class PrnParser {
 			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)((?:\\s\\w*)*)', 'ig'),
 			standardize: (match: any[]) => {
 				var reasons = match[1].split(' ');
-				// TODO: match each word against a database of diagnoses (SNOMED / UMLS?)
+				// TODO: match each word against a database of diagnoses (ICD-10 / UMLS?)
+				// https://documentation.uts.nlm.nih.gov/rest/search/
 				return {
 					asNeededBoolean: true,
 					asNeededCodeableConcept: reasons
