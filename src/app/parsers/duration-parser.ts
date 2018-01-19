@@ -10,7 +10,7 @@ export class DurationParser {
 			var match: any[] = [];
 			while (match = p.pattern.exec(this.sig)) {
 				this.duration.push({
-					match: match
+					match: match,
 					standardized: p.standardize(match)
 				});
 			}

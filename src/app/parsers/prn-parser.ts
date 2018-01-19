@@ -10,7 +10,7 @@ export class PrnParser {
 			var match: any[] = [];
 			while (match = p.pattern.exec(this.sig)) {
 				this.prn.push({
-					match: match
+					match: match,
 					standardized: p.standardize(match)
 				});
 			}
