@@ -1,17 +1,85 @@
+import { Injectable } from '@angular/core';
+import { NormalizeService } from '../services/normalize.service';
+
+@Injectable()
 export class RouteParser {
+	public route: any[] = [];
+
+	constructor(private normalize: NormalizeService) { }
+	
+	getRoute(): any[] { return this.route; }
+
+	parse(sig: string): void {
+		this.route = [];
+		this.getPatterns().forEach(p => {
+			var match: any[] = [];
+			while (match = p.pattern.exec(sig)) {
+				this.route.push({
+					match: match,
+					standardized: p.standardize(match)
+				});
+			}
+		});
+	}
+
+	getPatterns(): any[] {
+		var patterns: any[] = [];
+		
+		this.routes.map(r => {
+			patterns.push({
+				pattern: new RegExp('(' + r.synonyms.join('|') + ')', 'ig'),
+				standardize: (match: any[]) => {
+					return {
+						coding: {
+							system: 'http://snomed.info/sct',
+							code: r.code,
+							display: r.standard
+						},
+						text: r.preferred
+					}
+				}
+			});
+		});
+		
+		return patterns;
+	}
+	
+	private routes: any[] = [
+		{
+			code: 26643006,
+			standard: 'oral route',
+			preferred: 'by mouth',
+			synonyms: [
+				'oral route',
+				'by mouth',
+				'orally',
+				'po\\b',
+				'p.o.\\b',
+				'oral'
+			]
+		},
+		{
+			code: 34206005,
+			standard: 'subcutaneous route',
+			preferred: 'under the skin',
+			synonyms: [
+				'subcutaneous route',
+				'under the skin',
+				'in the skin',
+				'subcutaneously',
+				'subcutaneous',
+				'subq\\b',
+				'sub.q.\\b',
+				'sc\\b',
+				's.c.\\b',
+				'sq\\b',
+				's.q.\\b'
+			]
+		}
+	];
 }
 
-/*
-	route: {
-		coding: {
-			system: 'http://snomed.info/sct'
-			code: 26643006,
-			display: 'oral route'
-		}				
-	},
-*/
-
-/*
+/* 
 SNOMED_CID	SNOMED_PT
 10547007	Otic route
 12130007	Intra-articular route
@@ -19,7 +87,6 @@ SNOMED_CID	SNOMED_PT
 127491008	Jejunostomy route
 127492001	Nasogastric route
 16857009	Vaginal route
-26643006	Oral route
 34206005	Subcutaneous route
 37161004	Rectal route
 372449004	Dental route

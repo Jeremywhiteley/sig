@@ -1,4 +1,56 @@
+import { Injectable } from '@angular/core';
+import { NormalizeService } from '../services/normalize.service';
+
+@Injectable()
 export class MethodParser {
+	public method: any[] = [];
+
+	constructor(private normalize: NormalizeService) { }
+	
+	getMethod(): any[] { return this.method; }
+
+	parse(sig: string): void {
+		this.method = [];
+		this.getPatterns().forEach(p => {
+			var match: any[] = [];
+			while (match = p.pattern.exec(sig)) {
+				this.method.push({
+					match: match,
+					standardized: p.standardize(match)
+				});
+			}
+		});
+	}
+
+	getPatterns(): any[] {
+		var patterns: any[] = [];
+		
+		this.methods.map(m => {
+			patterns.push({
+				pattern: new RegExp('(' + m.standard + ')', 'ig'),
+				standardize: (match: any[]) => {
+					return {
+						coding: {
+							//system: 'http://snomed.info/sct',
+							code: m.code,
+							display: m.standard
+						},
+						text: m.preferred
+					}
+				}
+			});
+		});
+		
+		return patterns;
+	}
+	
+	private methods: any[] = [
+		{
+			code: 419652001,
+			standard: 'take',
+			preferred: 'take'
+		}
+	];
 }
 
 /*

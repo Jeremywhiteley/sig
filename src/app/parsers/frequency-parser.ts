@@ -1,14 +1,19 @@
+import { Injectable } from '@angular/core';
+import { NormalizeService } from '../services/normalize.service';
+
+@Injectable()
 export class FrequencyParser {
   public frequency: any[] = [];
   
-  constructor(private sig: string) {
-	this.parse();
-  }
+  constructor(private normalize: NormalizeService) { }
   
-  parse(): void {
+  getFrequency(): any[] { return this.frequency; }
+  
+  parse(sig: string): void {
+	this.frequency = [];
 	this.getPatterns().forEach(p => {
 		var match: any[] = [];
-		while (match = p.pattern.exec(this.sig)) {
+		while (match = p.pattern.exec(sig)) {
 			this.frequency.push({
 				match: match,
 				standardized: p.standardize(match)
@@ -18,10 +23,8 @@ export class FrequencyParser {
   }
   
   getPatterns(): any[] {
-		var regexOneToTwentyfour: string = 'one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twentyone|twenty one|twenty-one|twentytwo|twenty two|twenty-two|twentythree|twenty three|twenty-three|twentyfour|twenty four|twenty-four';
-		// NOTE: keep the x-y at the beginning and x at the end so that it finds the x-y first without stopping
-		var regexRange: string = '(?:(?:' + regexOneToTwentyfour + '|\\d+)\\s*(?:to|-|or)\\s*(?:' + regexOneToTwentyfour + '|\\d+)|\\d+|(?:' + regexOneToTwentyfour + '))';
-		var regexDaysOfWeek: string = 'monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon\\b|tue\\b|tues\\b|wed\\b|thu\\b|thur\\b|thurs\\b|fri\\b|sat\\b|sun\\b|m\\b|tu\\b|w\\b|th\\b|t\\b|f\\b|sa\\b|su\\b|s\\b';
+		var regexRange = this.normalize.getRegexRange();
+		var regexDaysOfWeek = this.normalize.getRegexDaysOfWeek();
 
 		var patterns: any[] = [
 		// bid | tid | qid
@@ -48,29 +51,29 @@ export class FrequencyParser {
 			standardize: (match: any[]) => {
 				var period = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				// TODO: normalize text numbers to integer numbers
-				// TODO: normalize hours / days / etc
 				return {
 					frequency: 1,
 					period: period[0],
-					periodUnit: match[2],
+					periodUnit: this.normalize.getPeriodUnit(match[2]),
 					periodMax: period[1] ? period[1] : null
 				}
 			}
 		},
 		// qam | qpm | qhs | qday | qdaily
 		// frequency = 1, period = 1, periodUnit = d, [when = a (normalize to MORN, AFT, EVE]
+		/* NOTE: this is likely duplicate of the pattern two patterns below
 		{
 			pattern: new RegExp('q\\.?\\s*(a\\.?m\\.?|p\\.?m\\.?|h\\.?s\\.?|day|daily)', 'ig'),
 			standardize: (match: any[]) => {
-				// TODO: normalize morn / aft / eve / etc
 				return {
 					frequency: 1,
 					period: 1,
 					periodUnit: 'd',
-					when: match[1] ? match[1] : null
+					when: this.normalize.getWhen(match[1])
 				}
 			}
 		},
+		*/
 
 		// in the
 		// morning | evening | afternoon
@@ -78,11 +81,10 @@ export class FrequencyParser {
 		{
 			pattern: new RegExp('in the\\s*(morning|evening|afternoon)', 'ig'),
 			standardize: (match: any[]) => {
-				// TODO: normalize morn / aft / eve / etc
 				return {
 					frequency: 1,
 					duration: 1,
-					when: match[1]
+					when: this.normalize.getWhen(match[1])
 				}
 			}
 		},
@@ -93,14 +95,13 @@ export class FrequencyParser {
 		// TODO: combine with the qpm/qhs/qday/qdaily group above
 		// frequency = 1, period = 1 (or 2 if a is not null), periodUnit = b (normalize to d, wk, mo), [when = b (normalize to MORN, AFT, EVE, etc]
 		{
-			pattern: new RegExp('(?:every|each|q)\\s*(other\\b|o\\b)?\\s*(day|week|month|morning|afternoon|evening|night|hs\\b|d\\b)', 'ig'),
+			pattern: new RegExp('(?:every|each|q)\\s*(other\\b|o\\b)?\\s*(day|week|month|morning|afternoon|evening|night|hs\\b|h.s.\\b|p.m.\\b|pm\\b|d\\b)', 'ig'),
 			standardize: (match: any[]) => {
-				var when = match[2]; // TODO: normalize to morn / aft / eve / etc
 				return {
 					frequency: 1,
 					period: match[1] ? 2 : 1,
-					periodUnit: match[2], // TODO: normalize to d, wk, mo, etc
-					when: when
+					periodUnit: this.normalize.getPeriodUnit(match[2]),
+					when: this.normalize.getWhen(match[2])
 				}
 			} 
 		},
@@ -141,13 +142,12 @@ export class FrequencyParser {
 			pattern: new RegExp('(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)?\\s*(daily|nightly|weekly|monthly|yearly)', 'ig'),
 			standardize: (match: any[]) => {
 				var frequency = match[1] ? match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-') : match[1];
-				// TODO: normalize d / wk / mo / yr / etc
 				// ISSUE: three to four times daily comes across as only four times daily
 				return {
 					frequency: frequency ? frequency[0] : 1,
 					frequencyMax: frequency ? frequency[1] : null,
 					period: 1,
-					periodUnit: match[2]
+					periodUnit: this.normalize.getPeriodUnit(match[2]),
 				}
 			}
 		},
@@ -166,13 +166,12 @@ export class FrequencyParser {
 			standardize: (match: any[]) => {
 				var frequency = match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-');
 				
-				// TODO: normalize d / wk / mo / yr / etc
 				// ISSUE: three to four times a day comes across as only four times a day
 				return {
 					frequency: frequency[0],
 					frequencyMax: frequency[1],
 					period: 1,
-					periodUnit: match[2]
+					periodUnit: this.normalize.getPeriodUnit(match[2]),
 				}
 			}
 		},
@@ -198,7 +197,7 @@ export class FrequencyParser {
 			pattern: new RegExp('(?:every|on|q)\\s+(?:(' + regexDaysOfWeek + ')\\s*,?\\s*(?:and|&|\\+)?\\s*)+', 'ig'),
 			standardize: (match: any[]) => {
 				return {
-					dayOfWeek: match[1]
+					dayOfWeek: match[1] // TODO: normalize days of week to FHIR standard
 				}
 			}
 		},

@@ -1,14 +1,19 @@
+import { Injectable } from '@angular/core';
+import { NormalizeService } from '../services/normalize.service';
+
+@Injectable()
 export class PrnParser {
 	public prn: any[] = [];
 
-	constructor(private sig: string) {	
-		this.parse();
-	}
+	constructor(private normalize: NormalizeService) { }
+	
+	getPrn(): any[] { return this.prn; }
 
-	parse(): void {
+	parse(sig: string): void {
+		this.prn = [];
 		this.getPatterns().forEach(p => {
 			var match: any[] = [];
-			while (match = p.pattern.exec(this.sig)) {
+			while (match = p.pattern.exec(sig)) {
 				this.prn.push({
 					match: match,
 					standardized: p.standardize(match)
@@ -18,17 +23,25 @@ export class PrnParser {
 	}
 
 	getPatterns(): any[] {
-		var regexOneToTwentyfour: string = 'one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|twentyone|twenty one|twenty-one|twentytwo|twenty two|twenty-two|twentythree|twenty three|twenty-three|twentyfour|twenty four|twenty-four';
-		// NOTE: keep the x-y at the beginning and x at the end so that it finds the x-y first without stopping
-		var regexRange: string = '(?:(?:' + regexOneToTwentyfour + '|(?:(?:\\d+\\s*)*(?:\\.|/))?\\d+)\\s*(?:to|-|or)\\s*(?:' + regexOneToTwentyfour + '|(?:(?:\\d+\\s*)*(?:\\.|/))?\\d+)|(?:(?:\\d+\\s*)*(?:\\.|/))?\\d+|(?:' + regexOneToTwentyfour + '))';
-
 		var patterns: any[] = [
 		{
-			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)((?:\\s\\w*)*)', 'ig'),
+			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)\\s*((?:\\w|\\s*)*)', 'ig'),
 			standardize: (match: any[]) => {
-				var reasons = match[1].split(' ');
+				var reasons = match[1] ? match[1].split(' ') : null;
 				// TODO: match each word against a database of diagnoses (ICD-10 / UMLS?)
 				// https://documentation.uts.nlm.nih.gov/rest/search/
+				if (reasons) { 
+					var indicationWords: string[] = [];
+					var indicationSearch: string = '';
+					reasons.forEach(r => {
+						indicationWords.push(r);
+						indicationSearch = indicationWords.join(' ');
+						console.log(indicationSearch);
+						// TODO do a UMLS search with the indicationSearch keyword, each time
+						// adding it to an array of search results, afterwards selecting the
+						// best match. Maybe limit to 5 words?
+					});
+				}
 				return {
 					asNeededBoolean: true,
 					asNeededCodeableConcept: reasons

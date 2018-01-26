@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { SigComponent } from './sig/sig.component';
 
+import { NormalizeService } from './services/normalize.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +18,9 @@ import { SigComponent } from './sig/sig.component';
 	FormsModule,
 	ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    NormalizeService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

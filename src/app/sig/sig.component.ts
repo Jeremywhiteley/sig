@@ -8,13 +8,23 @@ import {
 } from '@angular/forms';
 import { FrequencyParser } from '../parsers/frequency-parser';
 import { DoseParser } from '../parsers/dose-parser';
-import { PrnParser } from '../parsers/prn-parser';
+import { RouteParser } from '../parsers/route-parser';
 import { DurationParser } from '../parsers/duration-parser';
+import { PrnParser } from '../parsers/prn-parser';
+import { MethodParser } from '../parsers/method-parser';
 
 @Component({
   selector: 'app-sig',
   templateUrl: './sig.component.html',
-  styleUrls: ['./sig.component.css']
+  styleUrls: ['./sig.component.css'],
+  providers: [
+	FrequencyParser,
+	RouteParser,
+	DoseParser,
+	PrnParser,
+	DurationParser,
+	MethodParser
+  ]
 })
 export class SigComponent implements OnInit {
   sigForm: FormGroup;
@@ -22,41 +32,53 @@ export class SigComponent implements OnInit {
   
   sig: string;
   frequency: any[] = [];
+  route: any[] = [];
   dose: any[] = [];
   prn: any[] = [];
   duration: any[] = [];
+  method: any[] = [];
 
-  constructor(fb: FormBuilder) {
+  constructor(
+			private fb: FormBuilder,
+			private frequencyParser: FrequencyParser,
+			private routeParser: RouteParser,
+			private doseParser: DoseParser,
+			private prnParser: PrnParser,
+			private durationParser: DurationParser,
+			private methodParser: MethodParser
+		) {
     this.sigForm = fb.group({
-      'sigControl':  '1 tablet (10 mg) by mouth every 6 hours for 14 days as needed for nausea and vomiting'
+      'sigControl':  'Take 1 tablet (10 mg) by mouth every morning for 14 days as needed for nausea and vomiting'
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
 	  
     this.sigControl.valueChanges.subscribe(
       (value: string) => {
-	    this.updateSig(value);
+		this.sig = value;
+	    this.parseSig();
       }
     );
 	
-	this.updateSig(this.sigControl.value);
+	this.sig = this.sigControl.value;
+	this.parseSig();
   }
 
-  	updateSig(sig: string): void {
-	  this.sig = sig;
-	  this.frequency = new FrequencyParser(sig).frequency;
-	  this.dose = new DoseParser(sig, this.frequency).dose;
-	  this.prn = new PrnParser(sig).prn;
-	  this.duration = new DurationParser(sig).duration;
-	  /*
-	  console.log('sig frequency', this.frequency);
-	  console.log('sig dose', this.dose);
-	  console.log('prn', this.prn);
-	  console.log('duration', this.duration);
-	  */
+  parseSig(): void {
+	 this.frequencyParser.parse(this.sig);
+	 this.routeParser.parse(this.sig);
+	 this.doseParser.parse(this.sig);
+	 this.durationParser.parse(this.sig);
+	 this.prnParser.parse(this.sig);
+	 this.methodParser.parse(this.sig);
+	 
+	 this.frequency = this.frequencyParser.getFrequency();
+	 this.route = this.routeParser.getRoute();
+	 this.dose = this.doseParser.getDose();
+	 this.duration = this.durationParser.getDuration();
+	 this.prn = this.prnParser.getPrn();
+	 this.method = this.methodParser.getMethod();
   }
 
-  ngOnInit() {
-   }
- 
+  ngOnInit() { } 
 }
