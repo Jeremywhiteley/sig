@@ -27,15 +27,15 @@ export class MethodParser {
 		
 		this.methods.map(m => {
 			patterns.push({
-				pattern: new RegExp('(' + m.standard + ')', 'ig'),
+				pattern: new RegExp('(' + m.display + ')', 'ig'),
 				standardize: (match: any[]) => {
 					return {
 						coding: {
 							//system: 'http://snomed.info/sct',
 							code: m.code,
-							display: m.standard
+							display: m.display
 						},
-						text: m.preferred
+						text: m.text
 					}
 				}
 			});
@@ -47,8 +47,13 @@ export class MethodParser {
 	private methods: any[] = [
 		{
 			code: 419652001,
-			standard: 'take',
-			preferred: 'take'
+			display: 'take',
+			text: 'take'
+		},
+		{
+			code: 421067001,
+			display: 'then',	
+			text: 'then'
 		}
 	];
 }

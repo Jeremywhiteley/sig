@@ -32,6 +32,8 @@ export class DoseParser {
 		this.parseLoneNumericDose();
 	}
 	
+	// handle sigs like 1 qd or 1 po qd or one by mouth daily or one daily
+	// in these cases, we know the 'value' (i.e. 1 or one) but not the 'dose' (i.e. tablet, mL, etc)
 	parseLoneNumericDose(): void {
 		var frequency = this.frequency.getFrequency();
 		var route = this.route.getRoute();
@@ -46,9 +48,9 @@ export class DoseParser {
 		var patterns: any[] = [
 		{
 			// TODO: add all possible synonyms and names for dosage forms
-			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt)\\s*)' + regexRange + '(?=\\s*(spray|actuation|applicatorful|capful|puff|drop|bar|capsule|tablet|pad\\b|patch|tape|gum|gel|lozenge|strip|film|tab(?:s)*\\b|cap(?:s)*\\b))', 'ig'),
+			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt)\\s*)\\**' + regexRange + '\\**(?=\\s*(spray|actuation|applicatorful|capful|puff|drop|bar|capsule|tablet|pad\\b|patch|tape|gum|gel|lozenge|strip|film|tab(?:s)*\\b|cap(?:s)*\\b))', 'ig'),
 			standardize: (match: any[]) => {
-				var value = match[0].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
+				var value = match[0].replace(/\*/ig, '').replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				var dose = value.length > 1 ? { doseRange: { low: { value: value[0], unit: match[1] }, high: { value: value[1], unit: match[1] } } } : { doseQuantity: { value: value[0], unit: match[1] } }; 
 				return dose;
 			}

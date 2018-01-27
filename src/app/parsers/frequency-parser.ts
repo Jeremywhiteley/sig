@@ -180,7 +180,7 @@ export class FrequencyParser {
 		// exclude if followed by: day | week | month
 		// count = 1
 		{
-			pattern: new RegExp('(?:x\\s*1(?!(?:day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b))|one time only)', 'ig'),
+			pattern: new RegExp('(?:x\\s*1\\b(?!(?:day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b))|one time only)', 'ig'),
 			standardize: (match: any[]) => {
 				return {
 					count: 1

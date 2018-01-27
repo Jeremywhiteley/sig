@@ -48,7 +48,7 @@ export class SigComponent implements OnInit {
 			private methodParser: MethodParser
 		) {
     this.sigForm = fb.group({
-      'sigControl':  'Take 1 tablet (10 mg) by mouth every morning for 14 days as needed for nausea and vomiting'
+      'sigControl':  '1 po qd x 10 days'
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
