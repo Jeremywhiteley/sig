@@ -27,7 +27,8 @@ export class DurationParser {
 
 		var patterns: any[] = [
 		{
-			pattern: new RegExp('(?:for|x)\\s*(' + regexRange + ')\\s*(year|month|week|day|yr\\b|mon\\b|wk\\b|d\\b)', 'ig'),
+			// for 3 [more] days
+			pattern: new RegExp('(?:for|x)\\s*(' + regexRange + ')\\s*(?:more)?\\s*(year|month|week|day|yr\\b|mon\\b|wk\\b|d\\b)', 'ig'),
 			standardize: (match: any[]) => {
 				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				return {
@@ -36,7 +37,23 @@ export class DurationParser {
 					durationUnit: this.normalize.getPeriodUnit(match[2]),
 				};
 			}
+		},
+		
+		// on day(s)
+		// 1 | one | 1-2 | one to two | one-two
+		// (a: normalize 'to' to '-', and explode)
+		// if length of a > 1, then duration = a[1] - a[0]; else duration = 1
+		{
+			pattern: new RegExp('on day(?:s)?\\s*(' + regexRange + ')', 'ig'),
+			standardize: (match: any[]) => {
+				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
+				return {
+					duration: duration.length > 1 ? duration[1] - duration[0] : 1,
+					durationUnit: 'd',
+				};
+			}			
 		}
+				
 		];
 		
 		return patterns;

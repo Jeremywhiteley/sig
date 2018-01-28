@@ -10,7 +10,7 @@ import { FrequencyParser } from '../parsers/frequency-parser';
 import { DoseParser } from '../parsers/dose-parser';
 import { RouteParser } from '../parsers/route-parser';
 import { DurationParser } from '../parsers/duration-parser';
-import { PrnParser } from '../parsers/prn-parser';
+import { IndicationParser } from '../parsers/indication-parser';
 import { MethodParser } from '../parsers/method-parser';
 
 @Component({
@@ -21,7 +21,7 @@ import { MethodParser } from '../parsers/method-parser';
 	FrequencyParser,
 	RouteParser,
 	DoseParser,
-	PrnParser,
+	IndicationParser,
 	DurationParser,
 	MethodParser
   ]
@@ -34,7 +34,7 @@ export class SigComponent implements OnInit {
   frequency: any[] = [];
   route: any[] = [];
   dose: any[] = [];
-  prn: any[] = [];
+  indication: any[] = [];
   duration: any[] = [];
   method: any[] = [];
 
@@ -43,12 +43,17 @@ export class SigComponent implements OnInit {
 			private frequencyParser: FrequencyParser,
 			private routeParser: RouteParser,
 			private doseParser: DoseParser,
-			private prnParser: PrnParser,
+			private indicationParser: IndicationParser,
 			private durationParser: DurationParser,
 			private methodParser: MethodParser
 		) {
     this.sigForm = fb.group({
-      'sigControl':  '1 po qd x 10 days'
+      'sigControl':  '0.5 grams per vagina 2 nights per week (every Monday, Wednesday, and Thursday)'
+	  /* weird sigs to figure out:
+	  Take 2 tablets on day 1 and 1 tablet on days 2-5 (tricky part is the 'and')
+	  3 tabs p.o. x 1 with food on day 1. Thereafter, 1 tab p.o. t.i.d. with food to complete a 5 day course (tricky part is the 5 day course, and 'thereafter')
+	  
+	  */
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
@@ -69,14 +74,14 @@ export class SigComponent implements OnInit {
 	 this.routeParser.parse(this.sig);
 	 this.doseParser.parse(this.sig);
 	 this.durationParser.parse(this.sig);
-	 this.prnParser.parse(this.sig);
+	 this.indicationParser.parse(this.sig);
 	 this.methodParser.parse(this.sig);
 	 
 	 this.frequency = this.frequencyParser.getFrequency();
 	 this.route = this.routeParser.getRoute();
 	 this.dose = this.doseParser.getDose();
 	 this.duration = this.durationParser.getDuration();
-	 this.prn = this.prnParser.getPrn();
+	 this.indication = this.indicationParser.getIndication();
 	 this.method = this.methodParser.getMethod();
   }
 

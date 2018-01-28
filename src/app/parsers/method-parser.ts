@@ -35,7 +35,7 @@ export class MethodParser {
 							code: m.code,
 							display: m.display
 						},
-						text: m.text
+						text: m.display
 					}
 				}
 			});
@@ -45,16 +45,16 @@ export class MethodParser {
 	}
 	
 	private methods: any[] = [
-		{
-			code: 419652001,
-			display: 'take',
-			text: 'take'
-		},
-		{
-			code: 421067001,
-			display: 'then',	
-			text: 'then'
-		}
+		{ code: 417924000, display: 'apply'	},
+		{ code: 418283001, display: 'administer' },
+		{ code: 419385000, display: 'use' },
+		{ code: 419582001, display: 'give' },
+		{ code: 419652001, display: 'take' },
+		{ code: 419747000, display: 'chew' },
+		{ code: 422145002, display: 'inject' },
+
+		
+		{ code: 421067001, display: 'then' }
 	];
 }
 

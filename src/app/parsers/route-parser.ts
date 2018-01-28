@@ -33,9 +33,9 @@ export class RouteParser {
 						coding: {
 							system: 'http://snomed.info/sct',
 							code: r.code,
-							display: r.standard
+							display: r.display
 						},
-						text: r.preferred
+						text: r.text
 					}
 				}
 			});
@@ -44,36 +44,38 @@ export class RouteParser {
 		return patterns;
 	}
 	
-	private routes: any[] = [
-		{
-			code: 26643006,
-			standard: 'oral route',
-			preferred: 'by mouth',
-			synonyms: [
+	private routes: any[] = [ // NOTE: is . a special character that needs to be escaped?
+		{ code: 26643006, display: 'oral route', text: 'by mouth', synonyms: [
 				'oral route',
 				'by mouth',
 				'orally',
 				'po\\b',
-				'p.o.\\b',
+				'p.o.',
 				'oral'
 			]
 		},
-		{
-			code: 34206005,
-			standard: 'subcutaneous route',
-			preferred: 'under the skin',
-			synonyms: [
+		{ code: 34206005, display: 'subcutaneous route', text: 'under the skin', synonyms: [
 				'subcutaneous route',
 				'under the skin',
 				'in the skin',
 				'subcutaneously',
 				'subcutaneous',
 				'subq\\b',
-				'sub.q.\\b',
+				'sub.q.',
 				'sc\\b',
-				's.c.\\b',
+				's.c.',
 				'sq\\b',
-				's.q.\\b'
+				's.q.'
+			]
+		},		
+		{ code: 16857009, display: 'vaginal route', text: 'vaginally', synonyms: [
+				'vaginal route',
+				'per the vagina',
+				'vaginally',
+				'in the vagina',
+				'per vagina',
+				'p.v.',
+				'pv\\b'
 			]
 		}
 	];

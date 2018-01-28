@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { NormalizeService } from '../services/normalize.service';
 
 @Injectable()
-export class PrnParser { // TODO: rename this IndicationParser
-	public prn: any[] = [];
+export class IndicationParser {
+	public indication: any[] = [];
 
 	constructor(private normalize: NormalizeService) { }
 	
-	getPrn(): any[] { return this.prn; }
+	getIndication(): any[] { return this.indication; }
 
 	parse(sig: string): void {
-		this.prn = [];
+		this.indication = [];
 		this.getPatterns().forEach(p => {
 			var match: any[] = [];
 			while (match = p.pattern.exec(sig)) {
-				this.prn.push({
+				this.indication.push({
 					match: match,
 					standardized: p.standardize(match)
 				});
@@ -40,7 +40,6 @@ export class PrnParser { // TODO: rename this IndicationParser
 					reasons.forEach(r => {
 						indicationWords.push(r);
 						indicationSearch = indicationWords.join(' ');
-						console.log(indicationSearch);
 						// TODO do a UMLS search with the indicationSearch keyword, each time
 						// adding it to an array of search results, afterwards selecting the
 						// best match. Maybe limit to 5 words?

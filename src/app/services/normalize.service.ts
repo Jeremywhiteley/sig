@@ -100,18 +100,23 @@ export class NormalizeService {
 	
 	getRegexDaysOfWeek() { return this.regexDaysOfWeek; }
 	
-	getDayOfWeek() { return this.dayOfWeek; }
-	
 	getStandard(o: any[], s: string) {
-		var r = o.find(r => r.synonyms.indexOf(s) > -1);
+		// NOTE: which is faster? indexOf or RegExp?
+		//var r = o.find(i => i.synonyms.indexOf(s.toLowerCase()) > -1);
+		// RegExpExecArray
+		var r = o.find(i => new RegExp('(?:\\b' + i.synonyms.join('|') + '\\b)', 'ig').exec(s) ? true : false);
 		return r ? r.code : r;		
 	}
-
+ 
 	getWhen(s: string) {
 		return this.getStandard(this.when, s);
 	}
 	
 	getPeriodUnit(s: string) {
 		return this.getStandard(this.periodUnit, s);
+	}
+	
+	getDayOfWeek(s: string) {
+		return this.getStandard(this.dayOfWeek, s);
 	}
 }

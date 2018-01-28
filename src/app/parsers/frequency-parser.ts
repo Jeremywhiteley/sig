@@ -47,7 +47,7 @@ export class FrequencyParser {
 		// (a: normalize 'to' to '-', and explode)
 		// frequency = 1, period = a[0], periodUnit = b (normalize to h, d, wk, min), [periodMax = a[1]]
 		{
-			pattern: new RegExp('(?:q|every|each)\\s*(' + regexRange + ')\\s*(hours|days|weeks|h\\b|hrs\\b|hr\\b|min|mins)', 'ig'),
+			pattern: new RegExp('(?:q|every|each)\\s*\\(*\\**(' + regexRange + ')\\**\\)*\\s*(hours|days|weeks|h\\b|hrs\\b|hr\\b|min|mins)', 'ig'),
 			standardize: (match: any[]) => {
 				var period = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				// TODO: normalize text numbers to integer numbers
@@ -139,7 +139,7 @@ export class FrequencyParser {
 		// frequency = a (1 if once, 2 if twice, 1 if null), period = 1, periodUnit = b (normalize to d, wk, mo, yr)
 		// NOTE: this is where 'daily' and 'nightly' match
 		{
-			pattern: new RegExp('(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)?\\s*(daily|nightly|weekly|monthly|yearly)', 'ig'),
+			pattern: new RegExp('(?:(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)\\s*)?(daily|nightly|weekly|monthly|yearly)', 'ig'),
 			standardize: (match: any[]) => {
 				var frequency = match[1] ? match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-') : match[1];
 				// ISSUE: three to four times daily comes across as only four times daily
@@ -162,9 +162,9 @@ export class FrequencyParser {
 		// frequency = a (1 if once, 2 if twice), period = 1, periodUnit = b (normalize to d, wk, mo, yr)
 		// NOTE: 'daily' won't match this pattern
 		{
-			pattern: new RegExp('(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)\\s*(?:per|a|each|\/)\\s*(day|week|month|year|d\\b|w\\b|mon|m\\b|yr\\b)', 'ig'),
+			pattern: new RegExp('(' + regexRange + '\\s*(?:time(?:s)|x|nights|days)|once|twice)\\s*(?:per|a|each|\/)\\s*(day|week|month|year|d\\b|w\\b|mon|m\\b|yr\\b)', 'ig'),
 			standardize: (match: any[]) => {
-				var frequency = match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-');
+				var frequency = match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x|nights|days)/ig, '').replace(/\s/g, '').split('-');
 				
 				// ISSUE: three to four times a day comes across as only four times a day
 				return {
@@ -194,23 +194,18 @@ export class FrequencyParser {
 		// dayOfWeek = a
 		// ISSUE: only captures last day of multiple days (i.e. will only capture Friday for Monday, Wednesday, and Friday)
 		{
-			pattern: new RegExp('(?:every|on|q)\\s+(?:(' + regexDaysOfWeek + ')\\s*,?\\s*(?:and|&|\\+)?\\s*)+', 'ig'),
+			pattern: new RegExp('(?:every|on|q)\\s+((?:(?:\\s*(?:and|&|\\+|,)\\s*)*(?:' + regexDaysOfWeek + '))+)', 'ig'),
 			standardize: (match: any[]) => {
+				var day = match[1].replace(/(?:\s*(?:and|&|\+|,)\s*)+/ig, '|').split('|').map(d => this.normalize.getDayOfWeek(d));
+				
 				return {
-					dayOfWeek: match[1] // TODO: normalize days of week to FHIR standard
+					dayOfWeek: day
 				}
 			}
 		},
 		
 		];		
-		
-		// on day(s)
-		// 1 | one | 1-2 | one to two | one-two
-		// (a: normalize 'to' to '-', and explode)
-		// NOTE: this should move to the duration parser
-		// if length of a > 1, then duration = a[1] - a[0]; else duration = 1
-		//'on day(s)?\\s*(' + regexRange + ')',
-				
-	  return patterns;
+
+		return patterns;
   }
 }
