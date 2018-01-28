@@ -45,8 +45,10 @@ export class SigParser {
 				duration: this.durationParser.getDuration(),
 				indication: this.indicationParser.getIndication(),
 				method: this.methodParser.getMethod()
-			});
+			});			
 		});
+
+		console.log('sig', this.sig);
 	}
 
 	// split sig by 'then' occurrences

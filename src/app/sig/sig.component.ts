@@ -41,7 +41,7 @@ export class SigComponent implements OnInit {
 		private sigParser: SigParser
   ) {
     this.sigForm = fb.group({
-      'sigControl':  '0.5 grams per vagina 2 nights per week (every Monday, Wednesday, and Thursday)'
+      'sigControl':  '2 po on day 1 ; then one po daily x 4 days'
 	  /* weird sigs to figure out:
 	  Take 2 tablets on day 1 and 1 tablet on days 2-5 (tricky part is the 'and')
 	  3 tabs p.o. x 1 with food on day 1. Thereafter, 1 tab p.o. t.i.d. with food to complete a 5 day course (tricky part is the 5 day course, and 'thereafter')
