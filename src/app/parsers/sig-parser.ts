@@ -66,7 +66,7 @@ export class SigParser {
 			split.forEach((s, i) => {
 				sigs.push(sig.substring(index, s.index));
 				index = s.index;
-				if (i = split.length) sigs.push(sig.substring(index));
+				if (i == split.length - 1) sigs.push(sig.substring(index));
 			})
 		} else {
 			sigs.push(sig);
