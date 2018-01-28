@@ -29,7 +29,7 @@ export class IndicationParser {
 		{
 			// as needed for pain | prn for pain | p.r.n. pain | prn pain
 			// asNeededBoolean = true
-			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)\\s+((?:\\w|\\s*)*)', 'ig'),
+			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)\\s*((?:\\w|\\s*)*)', 'ig'),
 			standardize: (match: any[]) => {
 				var reasons = match[1] ? match[1].split(' ') : null;
 				// TODO: match each word against a database of diagnoses (ICD-10 / UMLS?)
