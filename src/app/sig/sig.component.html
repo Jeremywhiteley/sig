@@ -13,32 +13,37 @@
   </form>  
 </div>
 
-  <div class="col-xs-2">
-  Method:
-  <pre *ngFor="let m of method">{{m | json}}</pre>
-  </div>
-  
-  <div class="col-xs-2">
-  Dose:
-  <pre *ngFor="let d of dose">{{d | json}}</pre>
-  </div>
+  <div class="col-xs-12" *ngFor="let s of sig; let sequence = index">
+	  <div class="col-xs-12"><strong>Sequence {{s.sequence}}:</strong> {{s.text}}</div>
 
-  <div class="col-xs-2">
-  Route:
-  <pre *ngFor="let r of route">{{r | json}}</pre>
-  </div>
+	  <div class="col-xs-2">
+	  Method:
+	  <pre *ngFor="let m of s.method">{{m | json}}</pre>
+	  </div>
+	  
+	  <div class="col-xs-2">
+	  Dose:
+	  <pre *ngFor="let d of s.dose">{{d | json}}</pre>
+	  </div>
 
-  <div class="col-xs-2">
-  Frequency:
-  <pre *ngFor="let f of frequency">{{f | json}}</pre>
-  </div>
+	  <div class="col-xs-2">
+	  Route:
+	  <pre *ngFor="let r of s.route">{{r | json}}</pre>
+	  </div>
 
-  <div class="col-xs-2">
-  Duration:
-  <pre *ngFor="let d of duration">{{d | json}}</pre>
-  </div>
+	  <div class="col-xs-2">
+	  Frequency:
+	  <pre *ngFor="let f of s.frequency">{{f | json}}</pre>
+	  </div>
 
-  <div class="col-xs-2">
-  PRN:
-  <pre *ngFor="let p of prn">{{p | json}}</pre>
+	  <div class="col-xs-2">
+	  Duration:
+	  <pre *ngFor="let d of s.duration">{{d | json}}</pre>
+	  </div>
+
+	  <div class="col-xs-2">
+	  PRN:
+	  <pre *ngFor="let i of s.indication">{{i | json}}</pre>
+	  </div>
+	  
   </div>

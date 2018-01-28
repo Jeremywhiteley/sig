@@ -6,6 +6,8 @@ import {
   Validators,  
   AbstractControl  
 } from '@angular/forms';
+
+import { SigParser } from '../parsers/sig-parser';
 import { FrequencyParser } from '../parsers/frequency-parser';
 import { DoseParser } from '../parsers/dose-parser';
 import { RouteParser } from '../parsers/route-parser';
@@ -18,11 +20,12 @@ import { MethodParser } from '../parsers/method-parser';
   templateUrl: './sig.component.html',
   styleUrls: ['./sig.component.css'],
   providers: [
+	SigParser,
 	FrequencyParser,
-	RouteParser,
 	DoseParser,
-	IndicationParser,
+	RouteParser,
 	DurationParser,
+	IndicationParser,
 	MethodParser
   ]
 })
@@ -30,23 +33,13 @@ export class SigComponent implements OnInit {
   sigForm: FormGroup;
   sigControl: AbstractControl;
   
-  sig: string;
-  frequency: any[] = [];
-  route: any[] = [];
-  dose: any[] = [];
-  indication: any[] = [];
-  duration: any[] = [];
-  method: any[] = [];
+  sigString: string;
+  sig: any[] = [];
 
   constructor(
-			private fb: FormBuilder,
-			private frequencyParser: FrequencyParser,
-			private routeParser: RouteParser,
-			private doseParser: DoseParser,
-			private indicationParser: IndicationParser,
-			private durationParser: DurationParser,
-			private methodParser: MethodParser
-		) {
+		private fb: FormBuilder,
+		private sigParser: SigParser
+  ) {
     this.sigForm = fb.group({
       'sigControl':  '0.5 grams per vagina 2 nights per week (every Monday, Wednesday, and Thursday)'
 	  /* weird sigs to figure out:
@@ -60,29 +53,15 @@ export class SigComponent implements OnInit {
 	  
     this.sigControl.valueChanges.subscribe(
       (value: string) => {
-		this.sig = value;
-	    this.parseSig();
+		this.sigString = value;
+	    this.sigParser.parse(this.sigString);
+		this.sig = this.sigParser.getSig();
       }
     );
 	
-	this.sig = this.sigControl.value;
-	this.parseSig();
-  }
-
-  parseSig(): void {
-	 this.frequencyParser.parse(this.sig);
-	 this.routeParser.parse(this.sig);
-	 this.doseParser.parse(this.sig);
-	 this.durationParser.parse(this.sig);
-	 this.indicationParser.parse(this.sig);
-	 this.methodParser.parse(this.sig);
-	 
-	 this.frequency = this.frequencyParser.getFrequency();
-	 this.route = this.routeParser.getRoute();
-	 this.dose = this.doseParser.getDose();
-	 this.duration = this.durationParser.getDuration();
-	 this.indication = this.indicationParser.getIndication();
-	 this.method = this.methodParser.getMethod();
+	this.sigString = this.sigControl.value;
+	this.sigParser.parse(this.sigString);
+	this.sig = this.sigParser.getSig();
   }
 
   ngOnInit() { } 

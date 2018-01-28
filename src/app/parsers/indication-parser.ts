@@ -54,7 +54,7 @@ export class IndicationParser {
 		{	
 			// for nausea and vomiting (exclude prn before 'for', and exclude numbers immediately after 'for')
 			// asNeededBoolean = false
-			pattern: new RegExp('(?<!(?:as needed|p.r.n.|prn)\\s*)for\\s+(?!(?:' + regexRange + '))((?:\\w|\\s*)*)', 'ig'),
+			pattern: new RegExp('(?<!(?:as needed|p.r.n.|prn)\\s*)(?:for\\s+(?!(?:' + regexRange + '))((?:\\w|\\s)+))', 'ig'),
 			standardize: (match: any[]) => {
 				var reasons = match[1] ? match[1].split(' ') : null;
 				// TODO: match each word against a database of diagnoses (ICD-10 / UMLS?)
