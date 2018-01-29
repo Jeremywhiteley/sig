@@ -27,11 +27,11 @@ export class MethodParser {
 		
 		this.methods.map(m => {
 			patterns.push({
-				pattern: new RegExp('(' + m.display + ')', 'ig'),
+				pattern: new RegExp('\\b(' + m.display + ')\\b', 'ig'),
 				standardize: (match: any[]) => {
 					return {
 						coding: {
-							//system: 'http://snomed.info/sct',
+							 system: 'http://snomed.info/sct',
 							code: m.code,
 							display: m.display
 						},
@@ -44,80 +44,65 @@ export class MethodParser {
 		return patterns;
 	}
 	
+	// https://www.hl7.org/fhir/valueset-administration-method-codes.html
 	private methods: any[] = [
-		{ code: 417924000, display: 'apply'	},
+		{ code: 417924000, display: 'apply' },
 		{ code: 418283001, display: 'administer' },
 		{ code: 419385000, display: 'use' },
 		{ code: 419582001, display: 'give' },
 		{ code: 419652001, display: 'take' },
 		{ code: 419747000, display: 'chew' },
+		{ code: 420045007, display: 'suck' },
+		{ code: 420246001, display: 'at' },
+		{ code: 420247005, display: 'dosing instruction imperative' },
+		{ code: 420295001, display: 'only' },
+		{ code: 420341009, display: 'constant' },
+		{ code: 420360002, display: 'sniff' },
+		{ code: 420484009, display: 'subtract - dosing instruction fragment' },
+		{ code: 420503003, display: 'as' },
+		{ code: 420561004, display: 'or' },
+		{ code: 420604000, display: 'finish' },
+		{ code: 420606003, display: 'shampoo' },
+		{ code: 420620005, display: 'push' },
+		{ code: 420652005, display: 'until gone' },
+		{ code: 420771004, display: 'upon' },
+		{ code: 420806001, display: 'per' },
+		{ code: 420883007, display: 'sparingly' },
+		{ code: 420942008, display: 'call' },
+		{ code: 420974001, display: 'when' },
+		{ code: 421035004, display: 'to' },
+		{ code: 421066005, display: 'place' },
+		{ code: 421067001, display: 'then' },
+		{ code: 421134003, display: 'inhale' },
+		{ code: 421139008, display: 'hold' },
+		{ code: 421206002, display: 'multiply' },
+		{ code: 421257003, display: 'insert' },
+		{ code: 421286000, display: 'discontinue' },
+		{ code: 421298005, display: 'swish and swallow' },
+		{ code: 421399004, display: 'dilute' },
+		{ code: 421463005, display: 'with' },
+		{ code: 421484000, display: 'then discontinue' },
+		{ code: 421521009, display: 'swallow' },
+		{ code: 421538008, display: 'instill' },
+		{ code: 421548005, display: 'until' },
+		{ code: 421612001, display: 'every' },
+		{ code: 421682005, display: 'dissolve' },
+		{ code: 421718005, display: 'before' },
+		{ code: 421723005, display: 'now' },
+		{ code: 421769005, display: 'follow directions' },
+		{ code: 421803000, display: 'if' },
+		{ code: 421805007, display: 'swish' },
+		{ code: 421829000, display: 'and' },
+		{ code: 421832002, display: 'twice' },
+		{ code: 421939007, display: 'follow' },
+		{ code: 421984009, display: 'until finished' },
+		{ code: 421994004, display: 'during' },
+		{ code: 422033008, display: 'divide' },
+		{ code: 422106007, display: 'add' },
+		{ code: 422114001, display: 'once' },
 		{ code: 422145002, display: 'inject' },
-
-		
-		{ code: 421067001, display: 'then' }
+		{ code: 422152000, display: 'wash' },
+		{ code: 422219000, display: 'sprinkle' },
+		{ code: 422327006, display: 'then stop' }
 	];
 }
-
-/*
-https://www.hl7.org/fhir/valueset-administration-method-codes.html
-
-Code	Display	Definition
-417924000 	Apply	
-418283001 	Administer	
-419385000 	Use	
-419582001 	Give	
-419652001 	Take	
-419747000 	Chew	
-420045007 	Suck	
-420246001 	At	
-420247005 	Dosing instruction imperative	
-420295001 	Only	
-420341009 	Constant	
-420360002 	Sniff	
-420484009 	Subtract - dosing instruction fragment	
-420503003 	As	
-420561004 	Or	
-420604000 	Finish	
-420606003 	Shampoo	
-420620005 	Push	
-420652005 	Until gone	
-420771004 	Upon	
-420806001 	Per	
-420883007 	Sparingly	
-420942008 	Call	
-420974001 	When	
-421035004 	To	
-421066005 	Place	
-421067001 	Then	
-421134003 	Inhale	
-421139008 	Hold	
-421206002 	Multiply	
-421257003 	Insert	
-421286000 	Discontinue	
-421298005 	Swish and swallow	
-421399004 	Dilute	
-421463005 	With	
-421484000 	Then discontinue	
-421521009 	Swallow	
-421538008 	Instill	
-421548005 	Until	
-421612001 	Every	
-421682005 	Dissolve	
-421718005 	Before	
-421723005 	Now	
-421769005 	Follow directions	
-421803000 	If	
-421805007 	Swish	
-421829000 	And	
-421832002 	Twice	
-421939007 	Follow	
-421984009 	Until finished	
-421994004 	During	
-422033008 	Divide	
-422106007 	Add	
-422114001 	Once	
-422145002 	Inject	
-422152000 	Wash	
-422219000 	Sprinkle	
-422327006 	Then stop	
-*/

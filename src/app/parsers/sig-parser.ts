@@ -28,12 +28,18 @@ export class SigParser {
 		this.sig = [];
 		var sigs: string[] = this.splitSig(sig);
 		
+		// indication should apply to all pieces of the sig, even complex sigs
+		// TODO: do we need to make parse return the values so we don't need to duplicate getValue() type functions
+		// TODO: do we need to have these services be one-time use and call the providers at the app level?
+		// 		 could still keep SigParser at the component level...
+		this.indicationParser.parse(sig);
+		var indication = this.indicationParser.getIndication();
+		
 		sigs.forEach((s, i) => {				
 			this.frequencyParser.parse(s);
 			this.routeParser.parse(s);
 			this.doseParser.parse(s);
 			this.durationParser.parse(s);
-			this.indicationParser.parse(s);
 			this.methodParser.parse(s);
 
 			this.sig.push({
@@ -43,7 +49,7 @@ export class SigParser {
 				route: this.routeParser.getRoute(),
 				dose: this.doseParser.getDose(),
 				duration: this.durationParser.getDuration(),
-				indication: this.indicationParser.getIndication(),
+				indication: indication,
 				method: this.methodParser.getMethod()
 			});			
 		});

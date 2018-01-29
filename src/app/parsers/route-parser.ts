@@ -27,7 +27,7 @@ export class RouteParser {
 		
 		this.routes.map(r => {
 			patterns.push({
-				pattern: new RegExp('(' + r.synonyms.join('|') + ')', 'ig'),
+				pattern: new RegExp('(' + r.display + (r.synonyms ? '|' + r.synonyms.join('|') : '') + ')', 'ig'),
 				standardize: (match: any[]) => {
 					return {
 						coding: {
@@ -35,7 +35,7 @@ export class RouteParser {
 							code: r.code,
 							display: r.display
 						},
-						text: r.text
+						text: r.display
 					}
 				}
 			});
@@ -44,185 +44,181 @@ export class RouteParser {
 		return patterns;
 	}
 	
-	private routes: any[] = [ // NOTE: is . a special character that needs to be escaped?
-		{ code: 26643006, display: 'oral route', text: 'by mouth', synonyms: [
-				'oral route',
+	private routes: any[] = [
+		{ code: 26643006, display: 'oral route', synonyms: [
 				'by mouth',
 				'orally',
 				'po\\b',
-				'p.o.',
+				'p\\.o\\.',
 				'oral'
 			]
 		},
-		{ code: 34206005, display: 'subcutaneous route', text: 'under the skin', synonyms: [
-				'subcutaneous route',
+		{ code: 34206005, display: 'subcutaneous route', synonyms: [
 				'under the skin',
 				'in the skin',
 				'subcutaneously',
 				'subcutaneous',
 				'subq\\b',
-				'sub.q.',
+				'sub\\.q\\.',
 				'sc\\b',
-				's.c.',
+				's\\.c\\.',
 				'sq\\b',
-				's.q.'
+				's\\.q\\.'
 			]
-		},		
-		{ code: 16857009, display: 'vaginal route', text: 'vaginally', synonyms: [
-				'vaginal route',
+		},
+		{ code: 10547007, display: 'otic route', synonyms: [
+				'by ear',
+				'into (?:right|left|each|both) ear'
+			]
+		},
+		{ code: 12130007, display: 'intra-articular route' },
+		{ code: 127490009, display: 'gastrostomy route' },
+		{ code: 127491008, display: 'jejunostomy route' },
+		{ code: 127492001, display: 'nasogastric route' },
+		{ code: 16857009, display: 'vaginal route', synonyms: [
 				'per the vagina',
 				'vaginally',
 				'in the vagina',
 				'per vagina',
-				'p.v.',
+				'p\\.v\\.',
 				'pv\\b'
 			]
-		}
-	];
+		},
+		{ code: 34206005, display: 'subcutaneous route' },
+		{ code: 37161004, display: 'rectal route' },
+		{ code: 372449004, display: 'dental route' },
+		{ code: 372450004, display: 'endocervical route' },
+		{ code: 372451000, display: 'endosinusial route' },
+		{ code: 372452007, display: 'endotracheopulmonary route' },
+		{ code: 372453002, display: 'extra-amniotic route' },
+		{ code: 372454008, display: 'gastroenteral route' },
+		{ code: 372457001, display: 'gingival route' },
+		{ code: 372458006, display: 'intraamniotic route' },
+		{ code: 372459003, display: 'intrabursal route' },
+		{ code: 372460008, display: 'intracardiac route' },
+		{ code: 372461007, display: 'intracavernous route' },
+		{ code: 372463005, display: 'intracoronary route' },
+		{ code: 372464004, display: 'intradermal route' },
+		{ code: 372465003, display: 'intradiscal route' },
+		{ code: 372466002, display: 'intralesional route' },
+		{ code: 372467006, display: 'intralymphatic route' },
+		{ code: 372468001, display: 'intraocular route' },
+		{ code: 372469009, display: 'intrapleural route' },
+		{ code: 372470005, display: 'intrasternal route' },
+		{ code: 372471009, display: 'intravesical route' },
+		{ code: 372473007, display: 'oromucosal route' },
+		{ code: 372474001, display: 'periarticular route' },
+		{ code: 372475000, display: 'perineural route' },
+		{ code: 372476004, display: 'subconjunctival route' },
+		{ code: 37737002, display: 'intraluminal route' },
+		{ code: 37839007, display: 'sublingual route' },
+		{ code: 38239002, display: 'intraperitoneal route' },
+		{ code: 404815008, display: 'transmucosal route' },
+		{ code: 404819002, display: 'intrabiliary route' },
+		{ code: 404820008, display: 'epidural route' },
+		{ code: 416174007, display: 'suborbital route' },
+		{ code: 417070009, display: 'caudal route' },
+		{ code: 417255000, display: 'intraosseous route' },
+		{ code: 417950001, display: 'intrathoracic route' },
+		{ code: 417985001, display: 'enteral route' },
+		{ code: 417989007, display: 'intraductal route' },
+		{ code: 418091004, display: 'intratympanic route' },
+		{ code: 418114005, display: 'intravenous central route' },
+		{ code: 418133000, display: 'intramyometrial route' },
+		{ code: 418136008, display: 'gastro-intestinal stoma route' },
+		{ code: 418162004, display: 'colostomy route' },
+		{ code: 418204005, display: 'periurethral route' },
+		{ code: 418287000, display: 'intracoronal route' },
+		{ code: 418321004, display: 'retrobulbar route' },
+		{ code: 418331006, display: 'intracartilaginous route' },
+		{ code: 418401004, display: 'intravitreal route' },
+		{ code: 418418000, display: 'intraspinal route' },
+		{ code: 418441008, display: 'orogastric route' },
+		{ code: 418511008, display: 'transurethral route' },
+		{ code: 418586008, display: 'intratendinous route' },
+		{ code: 418608002, display: 'intracorneal route' },
+		{ code: 418664002, display: 'oropharyngeal route' },
+		{ code: 418722009, display: 'peribulbar route' },
+		{ code: 418730005, display: 'nasojejunal route' },
+		{ code: 418743005, display: 'fistula route' },
+		{ code: 418813001, display: 'surgical drain route' },
+		{ code: 418821007, display: 'intracameral route' },
+		{ code: 418851001, display: 'paracervical route' },
+		{ code: 418877009, display: 'intrasynovial route' },
+		{ code: 418887008, display: 'intraduodenal route' },
+		{ code: 418892005, display: 'intracisternal route' },
+		{ code: 418947002, display: 'intratesticular route' },
+		{ code: 418987007, display: 'intracranial route' },
+		{ code: 419021003, display: 'tumor cavity route' },
+		{ code: 419165009, display: 'paravertebral route' },
+		{ code: 419231003, display: 'intrasinal route' },
+		{ code: 419243002, display: 'transcervical route' },
+		{ code: 419320008, display: 'subtendinous route' },
+		{ code: 419396008, display: 'intraabdominal route' },
+		{ code: 419601003, display: 'subgingival route' },
+		{ code: 419631009, display: 'intraovarian route' },
+		{ code: 419684008, display: 'ureteral route' },
+		{ code: 419762003, display: 'peritendinous route' },
+		{ code: 419778001, display: 'intrabronchial route' },
+		{ code: 419810008, display: 'intraprostatic route' },
+		{ code: 419874009, display: 'submucosal route' },
+		{ code: 419894000, display: 'surgical cavity route' },
+		{ code: 419954003, display: 'ileostomy route' },
+		{ code: 419993007, display: 'intravenous peripheral route' },
+		{ code: 420047004, display: 'periosteal route' },
+		{ code: 420163009, display: 'esophagostomy route' },
+		{ code: 420168000, display: 'urostomy route' },
+		{ code: 420185003, display: 'laryngeal route' },
+		{ code: 420201002, display: 'intrapulmonary route' },
+		{ code: 420204005, display: 'mucous fistula route' },
+		{ code: 420218003, display: 'nasoduodenal route' },
+		{ code: 420254004, display: 'body cavity route' },
+		{ code: 420287000, display: 'intraventricular route - cardiac' },
+		{ code: 420719007, display: 'intracerebroventricular route' },
+		{ code: 428191002, display: 'percutaneous route' },
+		{ code: 429817007, display: 'interstitial route' },
+		{ code: 432671000124106, display: 'arteriovenous graft route' },
+		{ code: 445752009, display: 'intraesophageal route' },
+		{ code: 445754005, display: 'intragingival route' },
+		{ code: 445755006, display: 'intravascular route' },
+		{ code: 445756007, display: 'intradural route' },
+		{ code: 445767008, display: 'intrameningeal route' },
+		{ code: 445768003, display: 'intragastric route' },
+		{ code: 445769006, display: 'intracorpus cavernosum route' },
+		{ code: 445771006, display: 'intrapericardial route' },
+		{ code: 445913005, display: 'intralingual route' },
+		{ code: 445941009, display: 'intrahepatic route' },
+		{ code: 446105004, display: 'conjunctival route' },
+		{ code: 446407004, display: 'intraepicardial route' },
+		{ code: 446435000, display: 'transendocardial route' },
+		{ code: 446442000, display: 'transplacental route' },
+		{ code: 446540005, display: 'intracerebral route' },
+		{ code: 447026006, display: 'intraileal route' },
+		{ code: 447052000, display: 'periodontal route' },
+		{ code: 447080003, display: 'peridural route' },
+		{ code: 447081004, display: 'lower respiratory tract route' },
+		{ code: 447121004, display: 'intramammary route' },
+		{ code: 447122006, display: 'intratumor route' },
+		{ code: 447227007, display: 'transtympanic route' },
+		{ code: 447229005, display: 'transtracheal route' },
+		{ code: 447694001, display: 'respiratory tract route' },
+		{ code: 447964005, display: 'digestive tract route' },
+		{ code: 448077001, display: 'intraepidermal route' },
+		{ code: 448491004, display: 'intrajejunal route' },
+		{ code: 448492006, display: 'intracolonic route' },
+		{ code: 448598008, display: 'cutaneous route' },
+		{ code: 45890007, display: 'transdermal route' },
+		{ code: 46713006, display: 'nasal route' },
+		{ code: 47625008, display: 'intravenous route' },
+		{ code: 54471007, display: 'buccal route' },
+		{ code: 54485002, display: 'ophthalmic route' },
+		{ code: 58100008, display: 'intra-arterial route' },
+		{ code: 60213007, display: 'intramedullary route' },
+		{ code: 6064005, display: 'topical route' },
+		{ code: 62226000, display: 'intrauterine route' },
+		{ code: 697971008, display: 'arteriovenous fistula route' },
+		{ code: 72607000, display: 'intrathecal route' },
+		{ code: 78421000, display: 'intramuscular route' },
+		{ code: 90028008, display: 'urethral route' }
+  ];
 }
-
-/* 
-SNOMED_CID	SNOMED_PT
-10547007	Otic route
-12130007	Intra-articular route
-127490009	Gastrostomy route
-127491008	Jejunostomy route
-127492001	Nasogastric route
-16857009	Vaginal route
-34206005	Subcutaneous route
-37161004	Rectal route
-372449004	Dental route
-372450004	Endocervical route
-372451000	Endosinusial route
-372452007	Endotracheopulmonary route
-372453002	Extra-amniotic route
-372454008	Gastroenteral route
-372457001	Gingival route
-372458006	Intraamniotic route
-372459003	Intrabursal route
-372460008	Intracardiac route
-372461007	Intracavernous route
-372463005	Intracoronary route
-372464004	Intradermal route
-372465003	Intradiscal route
-372466002	Intralesional route
-372467006	Intralymphatic route
-372468001	Intraocular route
-372469009	Intrapleural route
-372470005	Intrasternal route
-372471009	Intravesical route
-372473007	Oromucosal route
-372474001	Periarticular route
-372475000	Perineural route
-372476004	Subconjunctival route
-37737002	Intraluminal route
-37839007	Sublingual route
-38239002	Intraperitoneal route
-404815008	Transmucosal route
-404819002	Intrabiliary route
-404820008	Epidural route
-416174007	Suborbital route
-417070009	Caudal route
-417255000	Intraosseous route
-417950001	Intrathoracic route
-417985001	Enteral route
-417989007	Intraductal route
-418091004	Intratympanic route
-418114005	Intravenous central route
-418133000	Intramyometrial route
-418136008	Gastro-intestinal stoma route
-418162004	Colostomy route
-418204005	Periurethral route
-418287000	Intracoronal route
-418321004	Retrobulbar route
-418331006	Intracartilaginous route
-418401004	Intravitreal route
-418418000	Intraspinal route
-418441008	Orogastric route
-418511008	Transurethral route
-418586008	Intratendinous route
-418608002	Intracorneal route
-418664002	Oropharyngeal route
-418722009	Peribulbar route
-418730005	Nasojejunal route
-418743005	Fistula route
-418813001	Surgical drain route
-418821007	Intracameral route
-418851001	Paracervical route
-418877009	Intrasynovial route
-418887008	Intraduodenal route
-418892005	Intracisternal route
-418947002	Intratesticular route
-418987007	Intracranial route
-419021003	Tumor cavity route
-419165009	Paravertebral route
-419231003	Intrasinal route
-419243002	Transcervical route
-419320008	Subtendinous route
-419396008	Intraabdominal route
-419601003	Subgingival route
-419631009	Intraovarian route
-419684008	Ureteral route
-419762003	Peritendinous route
-419778001	Intrabronchial route
-419810008	Intraprostatic route
-419874009	Submucosal route
-419894000	Surgical cavity route
-419954003	Ileostomy route
-419993007	Intravenous peripheral route
-420047004	Periosteal route
-420163009	Esophagostomy route
-420168000	Urostomy route
-420185003	Laryngeal route
-420201002	Intrapulmonary route
-420204005	Mucous fistula route
-420218003	Nasoduodenal route
-420254004	Body cavity route
-420287000	Intraventricular route - cardiac
-420719007	Intracerebroventricular route
-428191002	Percutaneous route
-429817007	Interstitial route
-432671000124106	Arteriovenous graft route
-445752009	Intraesophageal route
-445754005	Intragingival route
-445755006	Intravascular route
-445756007	Intradural route
-445767008	Intrameningeal route
-445768003	Intragastric route
-445769006	Intracorpus cavernosum route
-445771006	Intrapericardial route
-445913005	Intralingual route
-445941009	Intrahepatic route
-446105004	Conjunctival route
-446407004	Intraepicardial route
-446435000	Transendocardial route
-446442000	Transplacental route
-446540005	Intracerebral route
-447026006	Intraileal route
-447052000	Periodontal route
-447080003	Peridural route
-447081004	Lower respiratory tract route
-447121004	Intramammary route
-447122006	Intratumor route
-447227007	Transtympanic route
-447229005	Transtracheal route
-447694001	Respiratory tract route
-447964005	Digestive tract route
-448077001	Intraepidermal route
-448491004	Intrajejunal route
-448492006	Intracolonic route
-448598008	Cutaneous route
-45890007	Transdermal route
-46713006	Nasal route
-47625008	Intravenous route
-54471007	Buccal route
-54485002	Ophthalmic route
-58100008	Intra-arterial route
-60213007	Intramedullary route
-6064005	Topical route
-62226000	Intrauterine route
-697971008	Arteriovenous fistula route
-72607000	Intrathecal route
-78421000	Intramuscular route
-90028008	Urethral route
-*/

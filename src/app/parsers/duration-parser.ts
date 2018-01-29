@@ -59,15 +59,3 @@ export class DurationParser {
 		return patterns;
 	}
 }
-
-/*
-
-Code	Display	Definition
-s	second	second
-min	minute	minute
-h	hour	hour
-d	day	day
-wk	week	week
-mo	month	month
-a	year	year
-*/
