@@ -17,33 +17,37 @@
 	  <div class="col-xs-12"><strong>Sequence {{s.sequence}}:</strong> {{s.text}}</div>
 
 	  <div class="col-xs-2">
-	  Method:
+	  Method: <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
 	  <pre *ngFor="let m of s.method">{{m | json}}</pre>
 	  </div>
 	  
 	  <div class="col-xs-2">
-	  Dose:
+	  Dose: <a href="https://www.hl7.org/fhir/datatypes.html#Range" target="_blank">Range</a> or <a href="https://www.hl7.org/fhir/datatypes.html#SimpleQuantity" target="_blank">SimpleQuantity</a>
 	  <pre *ngFor="let d of s.dose">{{d | json}}</pre>
 	  </div>
 
 	  <div class="col-xs-2">
-	  Route:
+	  Route: <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
 	  <pre *ngFor="let r of s.route">{{r | json}}</pre>
 	  </div>
 
 	  <div class="col-xs-2">
-	  Frequency:
+	  Frequency: <a href="https://www.hl7.org/fhir/datatypes.html#Timing" target="_blank">Timing</a> (1/2)
 	  <pre *ngFor="let f of s.frequency">{{f | json}}</pre>
 	  </div>
 
 	  <div class="col-xs-2">
-	  Duration:
+	  Duration: <a href="https://www.hl7.org/fhir/datatypes.html#Timing" target="_blank">Timing</a> (2/2)
 	  <pre *ngFor="let d of s.duration">{{d | json}}</pre>
 	  </div>
 
 	  <div class="col-xs-2">
-	  Indication:
+	  Indication: <a href="https://www.hl7.org/fhir/datatypes.html#boolean" target="_blank">Boolean</a> or <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
 	  <pre *ngFor="let i of s.indication">{{i | json}}</pre>
 	  </div>
 	  
+	  <div class="col-xs-12">
+	  Standardized Sig: <a href="https://www.hl7.org/fhir/dosage.html" target="_blank">Dosage</a>
+	  <pre>{{s.standardized | json}}</pre>
+	  </div>	  
   </div>

@@ -84,7 +84,6 @@ export class RouteParser {
 				'pv\\b'
 			]
 		},
-		{ code: 34206005, display: 'subcutaneous route' },
 		{ code: 37161004, display: 'rectal route' },
 		{ code: 372449004, display: 'dental route' },
 		{ code: 372450004, display: 'endocervical route' },

@@ -11,6 +11,7 @@ import { MethodParser } from '../parsers/method-parser';
 @Injectable()
 export class SigParser {
 	public sig: any[] = [];
+	public fhirDosage: any;
 
 	constructor(
 			private normalize: NormalizeService, 
@@ -27,6 +28,8 @@ export class SigParser {
 	parse(sig: string): void {
 		this.sig = [];
 		var sigs: string[] = this.splitSig(sig);
+		var sigObj: any;
+		var standardize: any;
 		
 		// indication should apply to all pieces of the sig, even complex sigs
 		// TODO: do we need to make parse return the values so we don't need to duplicate getValue() type functions
@@ -41,8 +44,8 @@ export class SigParser {
 			this.doseParser.parse(s);
 			this.durationParser.parse(s);
 			this.methodParser.parse(s);
-
-			this.sig.push({
+			
+			sigObj = {
 				text: s,
 				sequence: i,
 				frequency: this.frequencyParser.getFrequency(),
@@ -51,10 +54,17 @@ export class SigParser {
 				duration: this.durationParser.getDuration(),
 				indication: indication,
 				method: this.methodParser.getMethod()
-			});			
-		});
+			};
+			
+			sigObj.standardized = this.standardize(sigObj);
 
+			this.sig.push(sigObj);			
+		}); 
+
+		this.fhirDosage = this.standardize(this.sig[0]);
+		
 		console.log('sig', this.sig);
+		console.log('fhirDosage', this.fhirDosage);
 	}
 
 	// split sig by 'then' occurrences
@@ -80,4 +90,61 @@ export class SigParser {
 
 		return sigs;
 	}
+	
+	standardize(sig: any): any {
+		var dosage: any = {
+			resourceType: 'Dosage',
+			// from Element: extension
+			sequence: sig.sequence, // The order of the dosage instructions
+			text: sig.text, // Free text dosage instructions e.g. SIG
+			/* additionalInstruction: [{ CodeableConcept }], // Supplemental instruction - e.g. "with meals" */
+			/* patientInstruction: "<string>", // Patient or consumer oriented instructions */
+			/* site: { CodeableConcept }, // Body site to administer to */
+			route: sig.route && sig.route.length > 0 ? sig.route[0].standardized : null, // How drug should enter body
+			method: sig.method && sig.method.length > 0 ? sig.method[0].standardized : null, // Technique for administering medication
+			/* "maxDosePerPeriod" : { Ratio }, // Upper limit on medication per unit of time */
+			/* "maxDosePerAdministration" : { Quantity(SimpleQuantity) }, // Upper limit on medication per administration */
+			/* "maxDosePerLifetime" : { Quantity(SimpleQuantity) }, // Upper limit on medication per lifetime of the patient */
+		};
+		
+		
+		/* asNeeded[x]: Take "as needed" (for x). One of these 2:
+		"asNeededBoolean" : <boolean>,
+		"asNeededCodeableConcept" : { CodeableConcept }, */
+		if (sig.indication && sig.indication.length > 0) {
+			if (sig.indication[0].standardized.asNeededCodeableConcept) {
+				dosage.asNeededCodeableConcept = sig.indication[0].standardized.asNeededCodeableConcept;
+			} else if (sig.indication[0].standardized.asNeededBoolean) {
+				dosage.asNeededBoolean = sig.indication[0].standardized.asNeededBoolean;
+			}
+		}
+		
+		/* dose[x]: Amount of medication per dose. One of these 2:
+		"doseRange" : { Range },
+		"doseQuantity" : { Quantity(SimpleQuantity) }, */
+		if (sig.dose && sig.dose.length > 0) {
+			if (sig.dose[0].standardized.doseRange) {
+				dosage.doseRange = sig.dose[0].standardized.doseRange;
+			} else if (sig.dose[0].standardized.doseQuantity) {
+				dosage.doseQuantity = sig.dose[0].standardized.doseQuantity;
+			}
+		}
+		
+		// When medication should be administered
+		if (sig.frequency && sig.frequency.length > 0 && sig.duration && sig.duration.length > 0) {
+			dosage.timing = Object.assign(sig.frequency[0].standardized, sig.duration[0].standardized)
+		} else if (sig.frequency && sig.frequency.length > 0) {
+			dosage.timing = sig.frequency[0].standardized;
+		} else if (sig.duration && sig.duration.length > 0) {
+			dosage.timing = sig.duration[0].standardized;
+		}
+		
+		/* rate[x]: Amount of medication per unit of time. One of these 3:
+		"rateRatio" : { Ratio }
+		"rateRange" : { Range }
+		"rateQuantity" : { Quantity(SimpleQuantity) } */
+		
+		return dosage;
+	}
+	
 }
