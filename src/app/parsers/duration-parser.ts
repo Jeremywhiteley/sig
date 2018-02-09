@@ -20,7 +20,7 @@ export class DurationParser {
 				});
 			}
 		});
-	}
+	} 
 
 	getPatterns(): any[] {
 		var regexRange = this.normalize.getRegexRange();
@@ -49,6 +49,18 @@ export class DurationParser {
 				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				return {
 					duration: duration.length > 1 ? duration[1] - duration[0] : 1,
+					durationUnit: 'd',
+				};
+			}			
+		},
+		
+		// today
+		// duration = 1, durationUnit = 'd'
+		{
+			pattern: new RegExp('today', 'ig'),
+			standardize: (match: any[]) => {
+				return {
+					duration: 1,
 					durationUnit: 'd',
 				};
 			}			

@@ -33,8 +33,9 @@ export class FrequencyParser {
 		{ 
 			pattern: new RegExp('(?:(?:\\s*(?:to|-|or)\\s*)?(b|t|q)\\.?i\\.?d\\b\\.?)+', 'ig'),
 			standardize: (match: any[]) => {
+				var f = match[1].toLowerCase();
 				return {
-					frequency: match[1] == 'b' ? 2 : match[1] == 't' ? 3 : match[1] == 'q' ? 4 : null,
+					frequency: f == 'b' ? 2 : f == 't' ? 3 : f == 'q' ? 4 : null,
 					period: 1,
 					periodUnit: 'd'
 				}
@@ -131,23 +132,35 @@ export class FrequencyParser {
 			}
 		},
 
-		// [once | twice]
+		// once | twice | 3-4 times
 		// daily | nightly | weekly | monthly | yearly
 		// once daily, twice monthly, daily
 		// (a: remove 'times' or 'x')
 		// frequency = a[0], frequencyMax = a[1], period = 1, periodUnit = b (normalize to d, wk, mo, yr)
 		// frequency = a (1 if once, 2 if twice, 1 if null), period = 1, periodUnit = b (normalize to d, wk, mo, yr)
-		// NOTE: this is where 'daily' and 'nightly' match
 		{
-			pattern: new RegExp('(?:(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)\\s*)?(daily|nightly|weekly|monthly|yearly)', 'ig'),
+			pattern: new RegExp('(?:(' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)\\s*)(daily|nightly|weekly|monthly|yearly)', 'ig'),
 			standardize: (match: any[]) => {
 				var frequency = match[1] ? match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-') : match[1];
-				// ISSUE: three to four times daily comes across as only four times daily
 				return {
 					frequency: frequency ? frequency[0] : 1,
 					frequencyMax: frequency ? frequency[1] : null,
 					period: 1,
 					periodUnit: this.normalize.getPeriodUnit(match[2]),
+				}
+			}
+		},
+		
+		// daily | nightly | weekly | monthly | yearly (exclude if anything from previous pattern precedes)
+		// NOTE: this is where 'daily' and 'nightly' match
+		{
+			pattern: new RegExp('(?<!(?:' + regexRange + '\\s*(?:time(?:s)|x)|once|twice)\\s*)(daily|nightly|weekly|monthly|yearly)', 'ig'),
+			standardize: (match: any[]) => {
+				var frequency = match[1] ? match[1].replace(/once/ig, '1').replace(/twice/ig, '2').replace(/(?:to|or)/ig, '-').replace(/(?:times|time|x)/ig, '').replace(/\s/g, '').split('-') : match[1];
+				return {
+					frequency: 1,
+					period: 1,
+					periodUnit: this.normalize.getPeriodUnit(match[1]),
 				}
 			}
 		},
@@ -180,7 +193,7 @@ export class FrequencyParser {
 		// exclude if followed by: day | week | month
 		// count = 1
 		{
-			pattern: new RegExp('(?:x\\s*1\\b(?!(?:day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b))|one time only)', 'ig'),
+			pattern: new RegExp('(?:x\\s*1\\b(?!day| day|d\\b| d\\b|week| week|w\\b| w\\b|month| month|mon|m\\b| m\\b| mon\\b)|one time only)', 'ig'),
 			standardize: (match: any[]) => {
 				return {
 					count: 1
