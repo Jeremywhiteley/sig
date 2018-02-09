@@ -71,13 +71,13 @@ export class NormalizeService {
 	a	year	year
 	*/
 	private periodUnit: any[] = [
-		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's' ] },
-		{ code: 'min', display: 'minute', synonyms: [ 'minutes', 'minute', 'mins', 'min', 'm' ] },
-		{ code: 'h', display: 'hour', synonyms: [ 'hours', 'hour', 'hrs', 'hr', 'h' ] },
 		{ code: 'd', display: 'day', synonyms: [ 'days', 'day', 'd', 'morning', 'morn', 'am', 'a.m.', 'afternoon', 'aft', 'pm', 'p.m.', 'evening', 'eve', 'night', 'hs', 'h.s.' ] },
-		{ code: 'wk', dispay: 'week', synonyms: [ 'weeks', 'week', 'wk', 'w' ] },
+		{ code: 'wk', dispay: 'week', synonyms: [ 'weeks', 'week', 'wk', 'w\\b' ] },
 		{ code: 'mo', display: 'month', synonyms: [ 'months', 'month', 'mon', 'mo' ] },
-		{ code: 'a', display: 'year', synonyms: [ 'years', 'year', 'yrs', 'yr', 'y' ] }				
+		{ code: 'h', display: 'hour', synonyms: [ 'hours', 'hour', 'hrs', 'hr', 'h\\b' ] },
+		{ code: 'min', display: 'minute', synonyms: [ 'minutes', 'minute', 'mins', 'min', 'm\\b' ] },
+		{ code: 'a', display: 'year', synonyms: [ 'years', 'year', 'yrs', 'yr', 'y\\b' ] }				
+		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's\\b' ] },
 	];
 
 	// TODO: associate these common codings with each structured frequency

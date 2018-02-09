@@ -49,10 +49,10 @@ export class RouteParser {
 	private routes: any[] = [
 		{ code: 26643006, display: 'oral route', synonyms: [
 				'by mouth',
-				'orally',
+				'orally(?! disintegrating)',
 				'po\\b',
 				'p\\.o\\.',
-				'oral'
+				'oral\\b'
 			]
 		},
 		{ code: 34206005, display: 'subcutaneous route', synonyms: [
@@ -86,6 +86,7 @@ export class RouteParser {
 				'pv\\b'
 			]
 		},
+		{ code: 6064005, display: 'topical route', synonyms: ['(?:to|on) the skin', 'topically'] },
 		{ code: 37161004, display: 'rectal route' },
 		{ code: 372449004, display: 'dental route' },
 		{ code: 372450004, display: 'endocervical route' },
@@ -215,7 +216,6 @@ export class RouteParser {
 		{ code: 54485002, display: 'ophthalmic route' },
 		{ code: 58100008, display: 'intra-arterial route' },
 		{ code: 60213007, display: 'intramedullary route' },
-		{ code: 6064005, display: 'topical route' },
 		{ code: 62226000, display: 'intrauterine route' },
 		{ code: 697971008, display: 'arteriovenous fistula route' },
 		{ code: 72607000, display: 'intrathecal route' },
