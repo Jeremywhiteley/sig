@@ -76,8 +76,8 @@ export class NormalizeService {
 		{ code: 'mo', display: 'month', synonyms: [ 'months', 'month', 'mon', 'mo' ] },
 		{ code: 'h', display: 'hour', synonyms: [ 'hours', 'hour', 'hrs', 'hr', 'h\\b' ] },
 		{ code: 'min', display: 'minute', synonyms: [ 'minutes', 'minute', 'mins', 'min', 'm\\b' ] },
-		{ code: 'a', display: 'year', synonyms: [ 'years', 'year', 'yrs', 'yr', 'y\\b' ] }				
-		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's\\b' ] },
+		{ code: 'a', display: 'year', synonyms: [ 'years', 'year', 'yrs', 'yr', 'y\\b' ] },			
+		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's\\b' ] }
 	];
 
 	// TODO: associate these common codings with each structured frequency
