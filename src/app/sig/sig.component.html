@@ -1,19 +1,21 @@
-<div class="col-xs-12">
-  <form [formGroup]="sigForm">
+<div class="sig-container">
+	<form [formGroup]="sigForm">
+		<div class="form-group">  
+			<input formControlName="sigControl" 
+			type="text"
+			id="sigControl"  
+			placeholder="type sig">  
+		</div>
+	</form>  
 
-    <div class="form-group">  
-      <label for="sigInput">Sig</label>  
-      <input formControlName="sigControl" 
-			 type="text"
-			 class="form-control"
-             id="sigControl"  
-             placeholder="Sig">  
-    </div>
-
-  </form>  
+	<div *ngFor="let s of sig; let sequence = index">
+		<pre class="json">{{s.standardized | json}}</pre>
+	</div>
 </div>
 
-  <div *ngFor="let s of sig; let sequence = index">
+	  <!--
+	  Standardized Sig: <a href="https://www.hl7.org/fhir/dosage.html" target="_blank">Dosage</a>
+	  
 	  <div class="col-xs-12"><strong>Sequence {{s.sequence}}:</strong> {{s.text}}</div>
 
 	  <div class="col-xs-2">
@@ -45,9 +47,5 @@
 	  Indication: <a href="https://www.hl7.org/fhir/datatypes.html#boolean" target="_blank">Boolean</a> or <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
 	  <pre *ngFor="let i of s.indication">{{i | json}}</pre>
 	  </div>
+	  -->
 	  
-	  <div class="col-xs-12">
-	  Standardized Sig: <a href="https://www.hl7.org/fhir/dosage.html" target="_blank">Dosage</a>
-	  <pre>{{s.standardized | json}}</pre>
-	  </div>	  
-  </div>

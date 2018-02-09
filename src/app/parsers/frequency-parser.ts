@@ -11,7 +11,7 @@ export class FrequencyParser {
   
   parse(sig: string): void {
 	this.frequency = [];
-	this.getPatterns().forEach(p => {
+	this.patterns.forEach(p => {
 		var match: any[] = [];
 		while (match = p.pattern.exec(sig)) {
 			this.frequency.push({
@@ -208,4 +208,6 @@ export class FrequencyParser {
 
 		return patterns;
   }
+  
+  private patterns: any[] = this.getPatterns();
 }

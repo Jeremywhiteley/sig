@@ -18,7 +18,7 @@ export class DoseParser {
 
 	parse(sig: string): void {
 		this.dose = [];
-		this.getPatterns().forEach(p => {
+		this.patterns.forEach(p => {
 			var match: any[] = [];
 			while (match = p.pattern.exec(sig)) {
 				this.dose.push({
@@ -65,21 +65,29 @@ export class DoseParser {
 			}
 		}
 	}
-
+	
 	getPatterns(): any[] {
 		var regexRange = this.normalize.getRegexRange();
 
-		var patterns: any[] = [
-		{
-			// TODO: add all possible synonyms and names for dosage forms
-			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(' + this.doseUnits.join('|') + '))', 'ig'),
-			standardize: (match: any[]) => {
-				var value = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
-				var dose = value.length > 1 ? { doseRange: { low: { value: value[0], unit: match[2] }, high: { value: value[1], unit: match[2] } } } : { doseQuantity: { value: value[0], unit: match[2] } }; 
-				return dose;
-			}
-		},
-		{
+		var patterns: any[] = [];
+		
+		var p: string[] = [];
+		
+		this.doseUnits.map(d => {
+			patterns.push({
+				// TODO: add all possible synonyms and names for dosage forms
+				pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(' + d.display + (d.synonyms ? '|' + d.synonyms.join('|') : '') + '))', 'ig'),
+				standardize: (match: any[]) => {
+					var value = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
+					var dose = value.length > 1 ? { doseRange: { low: { value: value[0], unit: d.display, system: 'http://snomed.info/sct', code: d.code }, high: { value: value[1], unit: d.display, system: 'http://snomed.info/sct', code: d.code } } } : { doseQuantity: { value: value[0], unit: d.display, system: 'http://snomed.info/sct', code: d.code } }; 
+					return dose;
+				}
+			});
+		});
+		
+		
+		patterns.push({
+			// TODO: standardize these mL / mg doseUnits like the ones below
 			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(milligram|microgram|gram|ounce|milliliter|liter|international unit|unit|tablespoonful|tablespoon|teaspoonful|teaspoon|tbsp|tsp|iu\\b|un\\b|mcg\\b|mg\\b|gm\\b|g\\b|ml\\b|l\\b))', 'ig'),
 			standardize: (match: any[]) => {
 				// TODO: maybe standardize tsp / tbsp / ounce / etc to mL?
@@ -88,388 +96,238 @@ export class DoseParser {
 				var dose = value.length > 1 ? { doseRange: { low: { value: value[0], unit: match[2] }, high: { value: value[1], unit: match[2] } } } : { doseQuantity: { value: value[0], unit: match[2] } };
 				return dose;
 			}
-		}
-		];
+		});
 		
 		return patterns;
 	}
 	
-	private doseUnits: string[] = [
-		'(?:extended release|delayed release|buccal|sustained release buccal|chewable|disintegrating|enteric coated|extended release enteric coated|sublingual|vaginal)?\\s*(?:oral)?\\s*tablet',
-		'spray',
-		'actuation',
-		'applicatorful',
-		'capful',
-		'puff',
-		'drop',
-		'bar',
-		'capsule',
-		'pad\\b',
-		'patch',
-		'tape',
-		'gum',
-		'gel',
-		'lozenge',
-		'strip',
-		'film',
-		'tab(?:s)?\\b',
-		'cap\\b',
-		'stick'
+	private doseUnits: any[] = [
+		/* patch */
+		{ code: 36875001, display: 'drug patch', synonyms: ['(?<!transdermal )patch'] },
+		{ code: 385114002, display: 'transdermal patch' },
+		/* tablet */
+		{ code: 385055001, display: 'tablet', synonyms: ['(?:(?<!film-coated|effervescentgastro-resistant|orodispersible|prolonged-release|vaginal|effervescent vaginal|modified-release|chewable|sublingual|buccalmuco-adhesive buccal|soluble|dispersible|delayed-release particles|oral|inhalation vapor|implantation|extended-release film coated|ultramicronized|extended-release|extended-release enteric coated|delayed-release|coated particles|sustained-release buccal|multilayer) )tablet'] },
+		{ code: 385057009, display: 'film-coated tablet' },
+		{ code: 385058004, display: 'effervescent tablet' },
+		{ code: 385059007, display: 'gastro-resistant tablet' },
+		{ code: 447079001, display: 'orodispersible tablet' }
+		{ code: 385060002, display: 'prolonged-release tablet' },
+		{ code: 385173001, display: 'tablet for vaginal solution' },
+		{ code: 385178005, display: 'vaginal tablet' },
+		{ code: 385192004, display: 'tablet for rectal solution' },
+		{ code: 385193009, display: 'tablet for rectal suspension' },
+		{ code: 385179002, display: 'effervescent vaginal tablet' },
+		{ code: 385061003, display: 'modified-release tablet' },
+		{ code: 66076007, display: 'chewable tablet' },
+		{ code: 385084005, display: 'sublingual tablet' },
+		{ code: 385085006, display: 'buccal tablet' },
+		{ code: 385086007, display: 'muco-adhesive buccal tablet' },
+		{ code: 385035002, display: 'soluble tablet' },
+		{ code: 385036001, display: 'dispersible tablet' },
+		{ code: 421535006, display: 'delayed-release particles tablet' },
+		{ code: 421026006, display: 'oral tablet' },
+		{ code: 385214006, display: 'inhalation vapor tablet' },
+		{ code: 385236009, display: 'implantation tablet' },
+		{ code: 420378007, display: 'extended-release film coated tablet' },
+		{ code: 420956005, display: 'ultramicronized tablet' },
+		{ code: 420627008, display: 'extended-release tablet', synonyms: ['(?:extended release|er|e.r.) tablet'] },
+		{ code: 421155001, display: 'extended-release enteric coated tablet', synonyms: ['(?:extended release|extended release|er|e.r.) (?:enteric coated|enteric-coated|e.c.|ec) tablet'] },
+		{ code: 421366001, display: 'tablet for oral suspension' },
+		{ code: 421374000, display: 'delayed-release tablet', synonyms: ['(?:delayed release|d.r.|dr) tablet'] },
+		{ code: 421721007, display: 'coated particles tablet' },
+		{ code: 422201009, display: 'tablet for cutaneous solution' },
+		{ code: 421620004, display: 'sustained-release buccal tablet' },
+		{ code: 421932003, display: 'multilayer tablet' },
+		{ code: 421701006, display: 'tablet for oral solution' },
+		
+		
+		/* drops */
+		{ code: 385018001, display: 'oral drops' },
+		{ code: 420636007, display: 'eye/ear drops' },
+		{ code: 385124005, display: 'eye drops' },
+		{ code: 385128008, display: 'prolonged-release eye drops' },
+		{ code: 385152001, display: 'nasal drops' },
+		{ code: 385163003, display: 'eye/ear/nose drops' },
+		{ code: 385136004, display: 'ear drops' },
+		{ code: 426684005, display: 'drops dose form' },
+		{ code: 427609008, display: 'modified release drops dose form' },
+		/* capsule */
+		{ code: 385049006, display: 'capsule' },
+		{ code: 385050006, display: 'hard capsule' },
+		{ code: 385051005, display: 'soft capsule' },
+		{ code: 385175008, display: 'vaginal capsule' },
+		{ code: 385208004, display: 'hard capsule inhalation powder' },
+		{ code: 385176009, display: 'hard vaginal capsule' },
+		{ code: 385177000, display: 'soft vaginal capsule' },
+		{ code: 385195002, display: 'rectal capsule' },
+		{ code: 385212005, display: 'inhalation vapor capsule' },
+		{ code: 385052003, display: 'gastro-resistant capsule' },
+		{ code: 385053008, display: 'prolonged-release capsule' },
+		{ code: 420293008, display: 'coated pellets capsule' },
+		{ code: 421027002, display: 'delayed-release capsule' },
+		{ code: 420692007, display: 'oral capsule' },
+		{ code: 421300005, display: 'extended-release film coated capsule' },
+		{ code: 421338009, display: 'extended-release coated capsule' },
+		{ code: 421618002, display: 'extended-release capsule' },
+		{ code: 427129005, display: 'coated capsule' },
+		{ code: 421752008, display: 'extended-release enteric coated capsule' },
+		{ code: 420767002, display: 'delayed-release pellets capsule' },
+		{ code: 385054002, display: 'modified-release capsule' },
+		{ code: 385083004, display: 'oromucosal capsule' },
+		/* spray */
+		{ code: 385073003, display: 'oromucosal spray' },
+		{ code: 385074009, display: 'sublingual spray' },
+		{ code: 385105007, display: 'cutaneous spray' },
+		{ code: 385278003, display: 'cutaneous powder spray' },
+		{ code: 421606006, display: 'aerosol spray' },
+		{ code: 421340004, display: 'powder spray' },
+		{ code: 385140008, display: 'ear spray' },
+		{ code: 426823003, display: 'vaginal spray' },
+		{ code: 425965000, display: 'rectal spray' },
+		{ code: 426969004, display: 'metered spray' },
+		{ code: 427564005, display: 'pressurized spray' },
+		{ code: 421720008, display: 'spray dose form' },
+		{ code: 385157007, display: 'nasal spray' },
+		{ code: 385279006, display: 'cutaneous suspension spray' },
+		{ code: 385106008, display: 'cutaneous solution spray' },
+		/* inhalation */
+		{ code: 385203008, display: 'pressurised inhalation' },
+		{ code: 385204002, display: 'pressurised inhalation solution' },
+		{ code: 385205001, display: 'pressurised inhalation suspension' },
+		{ code: 385206000, display: 'pressurised inhalation emulsion' },
+		{ code: 385207009, display: 'inhalation powder' },
+		{ code: 385210002, display: 'inhalation vapor' },
+		{ code: 385211003, display: 'inhalation vapor powder' },
+		{ code: 385213000, display: 'inhalation vapor solution' },
+		{ code: 385215007, display: 'inhalation vapor ointment' },
+		{ code: 385216008, display: 'inhalation vapor liquid' },
+		{ code: 385217004, display: 'inhalation gas' },
+		/* aerosol */
+		{ code: 424179000, display: 'aerosol generator' },
+		{ code: 421759004, display: 'metered dose aerosol inhaler' },
+		{ code: 420610000, display: 'nasal aerosol' },
+		{ code: 421104008, display: 'aerosol powder' },
+		{ code: 421347001, display: 'cutaneous aerosol' },
+		{ code: 420847003, display: 'metered dose aerosol' },
+		/* gum */
+		{ code: 426210003, display: 'gum' },
+		{ code: 385063000, display: 'oral gum' },
+		{ code: 385080001, display: 'medicated chewing-gum' },
+		/* film */
+		{ code: 420460001, display: 'film' },
+		{ code: 421043009, display: 'extended-release film' },
+		/* cone */
+		{ code: 421504000, display: 'cone' },
+		{ code: 422199007, display: 'dental cone' },
+		/* sponge */
+		{ code: 421288004, display: 'sponge' },
+		{ code: 424552006, display: 'vaginal sponge' },
+		{ code: 385119007, display: 'cutaneous sponge' },
+		/* pellet */
+		{ code: 420992009, display: 'implantable pellet' },
+		{ code: 420768007, display: 'pellet' },
+		/* inhaler */
+		{ code: 422054001, display: 'metered dose powder inhaler' },
+		{ code: 422059006, display: 'metered dose inhaler' },
+		{ code: 422151007, display: 'breath activated powder inhaler' },
+		{ code: 422197009, display: 'breath activated inhaler' },
+		{ code: 420317006, display: 'inhaler' },
+		/* stick */
+		{ code: 385148001, display: 'ear stick' },
+		{ code: 385162008, display: 'nasal stick' },
+		{ code: 11190007, display: 'drug stick' },
+		{ code: 385089000, display: 'dental stick' },
+		{ code: 385118004, display: 'cutaneous stick' },
+		{ code: 385246006, display: 'urethral stick' },
+		{ code: 385261007, display: 'wound stick' },
+		/* tampon */
+		{ code: 385147006, display: 'ear tampon' },
+		{ code: 385180004, display: 'medicated vaginal tampon' },
+		{ code: 385196001, display: 'rectal tampon' },
+		{ code: 420243009, display: 'tampon dose form' },
+		/* paste */
+		{ code: 385039008, display: 'oral paste' },
+		{ code: 37937005, display: 'drug paste', synonyms: ['(?<!oral )paste'] },
+		{ code: 385079004, display: 'oromucosal paste' },
+		{ code: 385082009, display: 'gingival paste' },		
+		
+		{ code: 17519006, display: 'lotion' },
+		{ code: 30843009, display: 'drug aerosol foam', synonyms: ['foam'] },
+		{ code: 46992007, display: 'pill\\b' },
+		{ code: 48582000, display: 'caplet' },
+		{ code: 52262001, display: 'drug aerosol' },
+		{ code: 385048003, display: 'cachet' },
+		{ code: 63316001, display: 'liniment' },
+		{ code: 64241004, display: 'drug pledget' },
+		{ code: 385062005, display: 'oral lyophilisate' },
+		{ code: 385064006, display: 'pillule' },
+		{ code: 385078007, display: 'oromucosal gel' },
+		{ code: 385081002, display: 'gingival gel' },
+		{ code: 385087003, display: 'lozenge' },
+		{ code: 385088008, display: 'dental gel' },
+		{ code: 385090009, display: 'dental insert' },
+		{ code: 385091008, display: 'dental powder' },
+		{ code: 385104006, display: 'shampoo' },
+		{ code: 385115001, display: 'collodion' },
+		{ code: 385116000, display: 'medicated nail laquer' },
+		{ code: 385117009, display: 'poultice' },
+		{ code: 385132002, display: 'ophthalmic insert' },
+		{ code: 385139006, display: 'ear powder' },
+		{ code: 385156003, display: 'nasal powder' },
+		{ code: 385164009, display: 'eye/ear/nose ointment' },
+		{ code: 385174007, display: 'pessary' },
+		{ code: 385186005, display: 'enema' },
+		{ code: 385194003, display: 'suppository' },
+		{ code: 385237000, display: 'implantation chain' },
+		{ code: 385286003, display: 'implant dosage form' },
+		{ code: 420385006, display: 'extended-release insert' },
+		{ code: 420631002, display: 'vaginal insert' },
+		{ code: 420699003, display: 'liquid dose form' },
+		{ code: 420761001, display: 'urethral suppository' },
+		{ code: 420927005, display: 'metered powder' },
+		{ code: 420929008, display: 'rectal suppository' },
+		{ code: 421034000, display: 'extended-release suppository' },
+		{ code: 421079001, display: 'pastille' },
+		{ code: 421131006, display: 'gaseous dose form' },
+		{ code: 421195004, display: 'vaginal suppository' },
+		{ code: 421271006, display: 'extended-release bead implant' },
+		{ code: 421378002, display: 'solid dose form' },
+		{ code: 421427005, display: 'eye/ear ointment' },
+		{ code: 421716009, display: 'transdermal drug delivery system' },
+		{ code: 421937009, display: 'medicated toothpaste' },
+		{ code: 422186009, display: 'tincture' },
+		{ code: 422259002, display: 'spirit' },
+		{ code: 422301006, display: 'modified-release pessary' },
+		{ code: 429885007, display: 'bar' },
+		{ code: 443424002, display: 'buccal film' },
+		{ code: 447050008, display: 'orodispersible film' },
 	];
+	
+	private patterns: any[] = this.getPatterns();
+
 }
 
 /*
-Code	Display	Definition
-7946007 	Drug suspension	
-11190007 	Drug stick	
-17519006 	Lotion	
-30843009 	Drug aerosol foam	
-36875001 	Drug patch	
-37937005 	Drug paste	
-46992007 	Pill	
-48582000 	Caplet	
-52262001 	Drug aerosol	
-63316001 	Liniment	
-64241004 	Drug pledget	
-66076007 	Chewable tablet	
-77899000 	Drug solution	
-85581007 	Drug powder	
-385018001 	Oral drops	
-385019009 	Oral drops solution	
-385020003 	Oral drops suspension	
-385021004 	Oral drops emulsion	
-385022006 	Oral liquid	
-385023001 	Oral solution	
-385024007 	Oral suspension	
-385025008 	Oral emulsion	
-385026009 	Powder for oral solution	
-385027000 	Powder for oral suspension	
-385028005 	Granules for oral solution	
-385029002 	Granules for oral suspension	
-385032004 	Syrup	
-385033009 	Powder for syrup	
-385034003 	Granules for syrup	
-385035002 	Soluble tablet	
-385036001 	Dispersible tablet	
-385038000 	Oral gel	
-385039008 	Oral paste	
-385041009 	Oral powder	
-385042002 	Effervescent powder	
-385043007 	Granules	
-385044001 	Effervescent granules	
-385045000 	Gastro-resistant granules	
-385046004 	Prolonged-release granules	
-385047008 	Modified-release granules	
-385048003 	Cachet	
-385049006 	Capsule	
-385050006 	Hard capsule	
-385051005 	Soft capsule	
-385052003 	Gastro-resistant capsule	
-385053008 	Prolonged-release capsule	
-385054002 	Modified-release capsule	
-385055001 	Tablet	
-385057009 	Film-coated tablet	
-385058004 	Effervescent tablet	
-385059007 	Gastro-resistant tablet	
-385060002 	Prolonged-release tablet	
-385061003 	Modified-release tablet	
-385062005 	Oral lyophilisate	
-385063000 	Oral gum	
-385064006 	Pillule	
-385069001 	Oromucosal liquid	
-385070000 	Oromucosal solution	
-385071001 	Oromucosal suspension	
-385073003 	Oromucosal spray	
-385074009 	Sublingual spray	
-385077002 	Gingival solution	
-385078007 	Oromucosal gel	
-385079004 	Oromucosal paste	
-385080001 	Medicated chewing-gum	
-385081002 	Gingival gel	
-385082009 	Gingival paste	
-385083004 	Oromucosal capsule	
-385084005 	Sublingual tablet	
-385085006 	Buccal tablet	
-385086007 	Muco-adhesive buccal tablet	
-385087003 	Lozenge	
-385088008 	Dental gel	
-385089000 	Dental stick	
-385090009 	Dental insert	
-385091008 	Dental powder	
-385092001 	Dental liquid	
-385094000 	Dental solution	
-385095004 	Dental suspension	
-385096003 	Dental emulsion	
-385098002 	Bath additive	
-385099005 	Cream	
-385100002 	Gel	
-385101003 	Ointment	
-385102005 	Cutaneous paste	
-385103000 	Cutaneous foam	
-385104006 	Shampoo	
-385105007 	Cutaneous spray	
-385106008 	Cutaneous solution spray	
-385107004 	Cutaneous liquid	
-385108009 	Cutaneous solution	
-385110006 	Cutaneous suspension	
-385111005 	Cutaneous emulsion	
-385112003 	Cutaneous powder	
-385113008 	Solution for iontophoresis	
-385114002 	Transdermal patch	
-385115001 	Collodion	
-385116000 	Medicated nail laquer	
-385117009 	Poultice	
-385118004 	Cutaneous stick	
-385119007 	Cutaneous sponge	
-385121002 	Eye cream	
-385122009 	Eye gel	
-385123004 	Eye ointment	
-385124005 	Eye drops	
-385125006 	Eye drops solution	
-385128008 	Prolonged-release eye drops	
-385130005 	Eye lotion	
-385132002 	Ophthalmic insert	
-385133007 	Ear cream	
-385134001 	Ear gel	
-385135000 	Ear ointment	
-385136004 	Ear drops	
-385137008 	Ear drops solution	
-385138003 	Ear drops emulsion	
-385139006 	Ear powder	
-385140008 	Ear spray	
-385141007 	Ear spray solution	
-385142000 	Ear spray suspension	
-385143005 	Ear spray emulsion	
-385147006 	Ear tampon	
-385148001 	Ear stick	
-385149009 	Nasal cream	
-385150009 	Nasal gel	
-385151008 	Nasal ointment	
-385152001 	Nasal drops	
-385153006 	Nasal drops solution	
-385154000 	Nasal drops suspension	
-385155004 	Nasal drops emulsion	
-385156003 	Nasal powder	
-385157007 	Nasal spray	
-385158002 	Nasal spray solution	
-385159005 	Nasal spray suspension	
-385160000 	Nasal spray emulsion	
-385162008 	Nasal stick	
-385163003 	Eye/ear/nose drops	
-385164009 	Eye/ear/nose ointment	
-385165005 	Vaginal cream	
-385166006 	Vaginal gel	
-385167002 	Vaginal ointment	
-385168007 	Vaginal foam	
-385169004 	Vaginal liquid	
-385170003 	Vaginal solution	
-385171004 	Vaginal suspension	
-385172006 	Vaginal emulsion	
-385173001 	Tablet for vaginal solution	
-385174007 	Pessary	
-385175008 	Vaginal capsule	
-385176009 	Hard vaginal capsule	
-385177000 	Soft vaginal capsule	
-385178005 	Vaginal tablet	
-385179002 	Effervescent vaginal tablet	
-385180004 	Medicated vaginal tampon	
-385182007 	Rectal cream	
-385183002 	Rectal gel	
-385184008 	Rectal ointment	
-385185009 	Rectal foam	
-385186005 	Enema	
-385187001 	Rectal solution	
-385188006 	Rectal suspension	
-385189003 	Rectal emulsion	
-385191006 	Powder for rectal suspension	
-385192004 	Tablet for rectal solution	
-385193009 	Tablet for rectal suspension	
-385194003 	Suppository	
-385195002 	Rectal capsule	
-385196001 	Rectal tampon	
-385197005 	Nebulizer liquid	
-385198000 	Nebulizer solution	
-385199008 	Nebulizer suspension	
-385200006 	Powder for nebulizer suspension	
-385201005 	Powder for nebulizer solution	
-385202003 	Nebulizer emulsion	
-385203008 	Pressurised inhalation	
-385204002 	Pressurised inhalation solution	
-385205001 	Pressurised inhalation suspension	
-385206000 	Pressurised inhalation emulsion	
-385207009 	Inhalation powder	
-385208004 	Hard capsule inhalation powder	
-385210002 	Inhalation vapor	
-385211003 	Inhalation vapor powder	
-385212005 	Inhalation vapor capsule	
-385213000 	Inhalation vapor solution	
-385214006 	Inhalation vapor tablet	
-385215007 	Inhalation vapor ointment	
-385216008 	Inhalation vapor liquid	
-385217004 	Inhalation gas	
-385219001 	Injection solution	
-385220007 	Injection suspension	
-385221006 	Injection emulsion	
-385222004 	Injection powder	
-385223009 	Powder for injection solution	
-385224003 	Powder for injection suspension	
-385229008 	Infusion solution	
-385230003 	Infusion powder	
-385231004 	Powder for infusion solution	
-385236009 	Implantation tablet	
-385237000 	Implantation chain	
-385242008 	Intravesical solution	
-385245005 	Urethral gel	
-385246006 	Urethral stick	
-385247002 	Endotracheopulmonary instillation solution	
-385248007 	Powder for endotracheopulmonary instillation solution	
-385250004 	Endotracheopulmonary instillation suspension	
-385251000 	Endocervical gel	
-385257001 	Gastroenteral liquid	
-385258006 	Gastroenteral solution	
-385259003 	Gastroenteral suspension	
-385260008 	Gastroenteral emulsion	
-385261007 	Wound stick	
-385262000 	Organ preservation solution	
-385278003 	Cutaneous powder spray	
-385279006 	Cutaneous suspension spray	
-385286003 	Implant dosage form	
-414951009 	Oral elixir	
-420243009 	Tampon dose form	
-420253005 	Oil injection	
-420275007 	Semi-solid dose form	
-420283001 	Nasal emulsion	
-420292003 	Rectal powder	
-420293008 	Coated pellets capsule	
-420305009 	Powder for oral liquid	
-420317006 	Inhaler	
-420378007 	Extended-release film coated tablet	
-420385006 	Extended-release insert	
-420386007 	Emulsion	
-420407000 	Inhalation aerosol solution	
-420430006 	Lyophilized powder for injectable extended release liposomal suspension	
-420450005 	Pressurized nebulizer suspension	
-420460001 	Film	
-420509004 	Oral granules	
-420536002 	Vaginal powder	
-420540006 	Cutaneous oil	
-420610000 	Nasal aerosol	
-420627008 	Extended-release tablet	
-420631002 	Vaginal insert	
-420634005 	Microspheres for injectable suspension	
-420636007 	Eye/ear drops	
-420641004 	Solution for inhalation	
-420656008 	Lyophilized powder for injectable liposomal suspension	
-420692007 	Oral capsule	
-420699003 	Liquid dose form	
-420705007 	Inhalation aerosol suspension	
-420736004 	Eye suspension	
-420757007 	Delayed-release granules	
-420761001 	Urethral suppository	
-420767002 	Delayed-release pellets capsule	
-420768007 	Pellet	
-420802004 	Extended-release liquid	
-420828001 	Powder for reconstitution for drug product	
-420847003 	Metered dose aerosol	
-420873008 	Extended release injectable suspension	
-420887008 	Intrathecal suspension	
-420891003 	Ear drops suspension	
-420901005 	Ear emulsion	
-420927005 	Metered powder	
-420929008 	Rectal suppository	
-420955009 	Powder for solution	
-420956005 	Ultramicronized tablet	
-420992009 	Implantable pellet	
-421026006 	Oral tablet	
-421027002 	Delayed-release capsule	
-421034000 	Extended-release suppository	
-421043009 	Extended-release film	
-421051007 	Sonicated injectable suspension	
-421056002 	Emulsion for inhalation	
-421079001 	Pastille	
-421080003 	Powder for suspension	
-421104008 	Aerosol powder	
-421131006 	Gaseous dose form	
-421155001 	Extended-release enteric coated tablet	
-421166008 	Foam	
-421195004 	Vaginal suppository	
-421221008 	Suspension for inhalation	
-421271006 	Extended-release bead implant	
-421288004 	Sponge	
-421300005 	Extended-release film coated capsule	
-421316007 	Powder for eye drops	
-421338009 	Extended-release coated capsule	
-421340004 	Powder spray	
-421343002 	Powder for cutaneous solution	
-421347001 	Cutaneous aerosol	
-421366001 	Tablet for oral suspension	
-421374000 	Delayed-release tablet	
-421378002 	Solid dose form	
-421382000 	Ear suspension	
-421410002 	Intravenous solution	
-421425002 	Powder for inhalation solution	
-421427005 	Eye/ear ointment	
-421428000 	Injectable oil suspension	
-421446006 	Extended-release granules for suspension	
-421504000 	Cone	
-421522002 	Liposomal injectable suspension	
-421532009 	Insert	
-421535006 	Delayed-release particles tablet	
-421575003 	Powder for ear drops	
-421606006 	Aerosol spray	
-421607002 	Powder for nasal drops	
-421618002 	Extended-release capsule	
-421620004 	Sustained-release buccal tablet	
-421628006 	Cutaneous cream	
-421637006 	Lyophilized powder for injectable solution	
-421669002 	Metered gel	
-421701006 	Tablet for oral solution	
-421713001 	Ear solution	
-421716009 	Transdermal drug delivery system	
-421720008 	Spray dose form	
-421721007 	Coated particles tablet	
-421752008 	Extended-release enteric coated capsule	
-421759004 	Metered dose aerosol inhaler	
-421765004 	Intraperitoneal solution	
-421857007 	Powder for ophthalmic solution	
-421873001 	Oral cream	
-421890007 	Oil	
-421932003 	Multilayer tablet	
-421937009 	Medicated toothpaste	
-421943006 	Lyophilized powder for injectable suspension	
-421949005 	Cutaneous gel	
-421987002 	Intraocular solution	
-421999009 	Extended-release coated pellets	
-422054001 	Metered dose powder inhaler	
-422059006 	Metered dose inhaler	
-422060001 	Ophthalmic solution	
-422068008 	Eye drops suspension	
-422080000 	Nasal suspension	
-422085005 	Powder for ophthalmic suspension	
-422151007 	Breath activated powder inhaler	
-422186009 	Tincture	
-422197009 	Breath activated inhaler	
-422199007 	Dental cone	
-422201009 	Tablet for cutaneous solution	
-422202002 	Colloidal suspension for injection	
-422259002 	Spirit	
-422264003 	Powder for injectable extended release suspension	
-422301006 	Modified-release pessary	
-422336005 	Nasal solution	
-422353003 	Extended-release suspension	
-424179000 	Aerosol generator	
-424552006 	Vaginal sponge	
-425753008 	Topical ointment	
-425965000 	Rectal spray	
-426210003 	Gum	
-426684005 	Drops dose form	
-426823003 	Vaginal spray	
-426969004 	Metered spray	
-427129005 	Coated capsule	
-427564005 	Pressurized spray	
-427609008 	Modified release drops dose form	
-429885007 	Bar	
-443424002 	Buccal film	
-447050008 	Orodispersible film	
-447079001 	Orodispersible tablet	
+[
+	'(?:extended release|delayed release|buccal|sustained release buccal|chewable|disintegrating|enteric coated|extended release enteric coated|sublingual|vaginal)?\\s*(?:oral)?\\s*tablet',
+	'spray',
+	'actuation',
+	'applicatorful',
+	'capful',
+	'puff',
+	'drop',
+	'bar',
+	'capsule',
+	'pad\\b',
+	'patch',
+	'tape',
+	'gum',
+	'gel',
+	'lozenge',
+	'strip',
+	'film',
+	'tab(?:s)?\\b',
+	'cap\\b',
+	'stick'
+];
 */

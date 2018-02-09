@@ -7,11 +7,13 @@ export class RouteParser {
 
 	constructor(private normalize: NormalizeService) { }
 	
+	ngOnInit() { }
+	
 	getRoute(): any[] { return this.route; }
 
 	parse(sig: string): void {
 		this.route = [];
-		this.getPatterns().forEach(p => {
+		this.patterns.forEach(p => {
 			var match: any[] = [];
 			while (match = p.pattern.exec(sig)) {
 				this.route.push({
@@ -220,4 +222,6 @@ export class RouteParser {
 		{ code: 78421000, display: 'intramuscular route' },
 		{ code: 90028008, display: 'urethral route' }
   ];
+  
+  private patterns: any[] = this.getPatterns();
 }

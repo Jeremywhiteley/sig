@@ -11,7 +11,7 @@ export class MethodParser {
 
 	parse(sig: string): void {
 		this.method = [];
-		this.getPatterns().forEach(p => {
+		this.patterns.forEach(p => {
 			var match: any[] = [];
 			while (match = p.pattern.exec(sig)) {
 				this.method.push({
@@ -108,4 +108,6 @@ export class MethodParser {
 		{ code: 422327006, display: 'then stop' }
 		*/
 	];
+	
+	private patterns: any[] = this.getPatterns();
 }

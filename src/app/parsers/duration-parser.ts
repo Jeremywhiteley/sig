@@ -11,7 +11,7 @@ export class DurationParser {
 
 	parse(sig: string): void {
 		this.duration = [];
-		this.getPatterns().forEach(p => {
+		this.patterns.forEach(p => {
 			var match: any[] = [];
 			while (match = p.pattern.exec(sig)) {
 				this.duration.push({
@@ -58,4 +58,6 @@ export class DurationParser {
 		
 		return patterns;
 	}
+	
+	private patterns: any[] = this.getPatterns();
 }
