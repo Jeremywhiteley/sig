@@ -110,7 +110,7 @@ export class DoseParser {
 		{ code: 385057009, display: 'film-coated tablet' },
 		{ code: 385058004, display: 'effervescent tablet' },
 		{ code: 385059007, display: 'gastro-resistant tablet' },
-		{ code: 447079001, display: 'orodispersible tablet' }
+		{ code: 447079001, display: 'orodispersible tablet' },
 		{ code: 385060002, display: 'prolonged-release tablet' },
 		{ code: 385173001, display: 'tablet for vaginal solution' },
 		{ code: 385178005, display: 'vaginal tablet' },

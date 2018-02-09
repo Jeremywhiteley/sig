@@ -95,29 +95,14 @@ export class SigParser {
 		var dosage: any = {
 			resourceType: 'Dosage',
 			// from Element: extension
-			sequence: sig.sequence, // The order of the dosage instructions
 			text: sig.text, // Free text dosage instructions e.g. SIG
-			/* additionalInstruction: [{ CodeableConcept }], // Supplemental instruction - e.g. "with meals" */
-			/* patientInstruction: "<string>", // Patient or consumer oriented instructions */
-			/* site: { CodeableConcept }, // Body site to administer to */
-			route: sig.route && sig.route.length > 0 ? sig.route[0].standardized : null, // How drug should enter body
-			method: sig.method && sig.method.length > 0 ? sig.method[0].standardized : null, // Technique for administering medication
-			/* "maxDosePerPeriod" : { Ratio }, // Upper limit on medication per unit of time */
-			/* "maxDosePerAdministration" : { Quantity(SimpleQuantity) }, // Upper limit on medication per administration */
-			/* "maxDosePerLifetime" : { Quantity(SimpleQuantity) }, // Upper limit on medication per lifetime of the patient */
 		};
 		
+		/* Technique for administering medication */
+		if (sig.method && sig.method.length > 0) dosage.method = sig.method[0].standardized;
 		
-		/* asNeeded[x]: Take "as needed" (for x). One of these 2:
-		"asNeededBoolean" : <boolean>,
-		"asNeededCodeableConcept" : { CodeableConcept }, */
-		if (sig.indication && sig.indication.length > 0) {
-			if (sig.indication[0].standardized.asNeededCodeableConcept) {
-				dosage.asNeededCodeableConcept = sig.indication[0].standardized.asNeededCodeableConcept;
-			} else if (sig.indication[0].standardized.asNeededBoolean) {
-				dosage.asNeededBoolean = sig.indication[0].standardized.asNeededBoolean;
-			}
-		}
+		/* The order of the dosage instructions */
+		if (sig.sequence) dosage.sequence = sig.sequence;
 		
 		/* dose[x]: Amount of medication per dose. One of these 2:
 		"doseRange" : { Range },
@@ -129,7 +114,10 @@ export class SigParser {
 				dosage.doseQuantity = sig.dose[0].standardized.doseQuantity;
 			}
 		}
-		
+				
+		/* How drug should enter body */
+		if (sig.route && sig.route.length > 0) dosage.route = sig.route[0].standardized;
+				
 		// When medication should be administered
 		if (sig.frequency && sig.frequency.length > 0 && sig.duration && sig.duration.length > 0) {
 			dosage.timing = Object.assign(sig.frequency[0].standardized, sig.duration[0].standardized)
@@ -139,10 +127,29 @@ export class SigParser {
 			dosage.timing = sig.duration[0].standardized;
 		}
 		
+		/* asNeeded[x]: Take "as needed" (for x). One of these 2:
+		"asNeededBoolean" : <boolean>,
+		"asNeededCodeableConcept" : { CodeableConcept }, */
+		if (sig.indication && sig.indication.length > 0) {
+			if (sig.indication[0].standardized.asNeededCodeableConcept) {
+				dosage.asNeededCodeableConcept = sig.indication[0].standardized.asNeededCodeableConcept;
+			} else if (sig.indication[0].standardized.asNeededBoolean) {
+				dosage.asNeededBoolean = sig.indication[0].standardized.asNeededBoolean;
+			}
+		}
+
+		
 		/* rate[x]: Amount of medication per unit of time. One of these 3:
 		"rateRatio" : { Ratio }
 		"rateRange" : { Range }
-		"rateQuantity" : { Quantity(SimpleQuantity) } */
+		"rateQuantity" : { Quantity(SimpleQuantity) }		
+		additionalInstruction: [{ CodeableConcept }], // Supplemental instruction - e.g. "with meals"
+		patientInstruction: "<string>", // Patient or consumer oriented instructions
+		site: { CodeableConcept }, // Body site to administer to
+		"maxDosePerPeriod" : { Ratio }, // Upper limit on medication per unit of time
+		"maxDosePerAdministration" : { Quantity(SimpleQuantity) }, // Upper limit on medication per administration
+		"maxDosePerLifetime" : { Quantity(SimpleQuantity) }, // Upper limit on medication per lifetime of the patient */
+
 		
 		return dosage;
 	}
