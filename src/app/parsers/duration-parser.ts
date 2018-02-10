@@ -31,10 +31,16 @@ export class DurationParser {
 			pattern: new RegExp('(?:for|x)\\s*(' + regexRange + ')\\s*(?:more)?\\s*(year|month|week|day|yr\\b|mon\\b|wk\\b|d\\b)', 'ig'),
 			standardize: (match: any[]) => {
 				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
-				return {
+				var repeat = {
 					duration: duration[0],
 					durationMax: duration[1],
 					durationUnit: this.normalize.getPeriodUnit(match[2]),
+				};
+				return {
+					repeat: repeat,
+					code: {
+						text: 'for ' + repeat.duration + (repeat.durationMax ? ' to ' + repeat.durationMax : '') + ' ' + this.normalize.getPeriodUnitDisplayFromCode(repeat.durationUnit) + (repeat.duration > 1 || repeat.durationMax ? 's' : '')
+					}
 				};
 			}
 		},
@@ -47,9 +53,16 @@ export class DurationParser {
 			pattern: new RegExp('on day(?:s)?\\s*(' + regexRange + ')', 'ig'),
 			standardize: (match: any[]) => {
 				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
-				return {
+				var repeat = {
 					duration: duration.length > 1 ? duration[1] - duration[0] : 1,
-					durationUnit: 'd',
+					durationUnit: 'd'
+				};
+				return {
+					
+					repeat: repeat,
+					code: {
+						text: 'for ' + repeat.duration + ' ' + this.normalize.getPeriodUnitDisplayFromCode(repeat.durationUnit) + (repeat.duration > 1 ? 's' : '')
+					}
 				};
 			}			
 		},
@@ -59,9 +72,15 @@ export class DurationParser {
 		{
 			pattern: new RegExp('today', 'ig'),
 			standardize: (match: any[]) => {
-				return {
+				var repeat = {
 					duration: 1,
-					durationUnit: 'd',
+					durationUnit: 'd'
+				}
+				return {
+					repeat: repeat,
+					code: {
+						text: 'for 1 day'
+					}					
 				};
 			}			
 		}

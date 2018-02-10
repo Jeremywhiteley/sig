@@ -86,7 +86,7 @@ export class RouteParser {
 				'pv\\b'
 			]
 		},
-		{ code: 6064005, display: 'topical route', synonyms: ['(?:to|on) the skin', 'topically'] },
+		{ code: 6064005, display: 'topical route', synonyms: ['(?:to|on) the skin', 'topically', '(?:to|on) affected area'] },
 		{ code: 37161004, display: 'rectal route' },
 		{ code: 372449004, display: 'dental route' },
 		{ code: 372450004, display: 'endocervical route' },

@@ -20,6 +20,10 @@ input {
 	margin-bottom: 10px;
 }
 
+pre {
+    white-space: pre-wrap;
+}
+
 .sig-container {
 	margin-left: auto;
 	margin-right: auto;

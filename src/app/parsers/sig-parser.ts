@@ -11,7 +11,6 @@ import { MethodParser } from '../parsers/method-parser';
 @Injectable()
 export class SigParser {
 	public sig: any[] = [];
-	public fhirDosage: any;
 
 	constructor(
 			private normalize: NormalizeService, 
@@ -57,14 +56,10 @@ export class SigParser {
 			};
 			
 			sigObj.standardized = this.standardize(sigObj);
+			sigObj.stdText = this.getSigText(sigObj.standardized);
 
 			this.sig.push(sigObj);			
 		}); 
-
-		this.fhirDosage = this.standardize(this.sig[0]);
-		
-		console.log('sig', this.sig);
-		console.log('fhirDosage', this.fhirDosage);
 	}
 
 	// split sig by 'then' occurrences
@@ -91,18 +86,19 @@ export class SigParser {
 		return sigs;
 	}
 	
+	// TODO: use this function to reverse engineer from the FHIR code
+	//       Hardest should be the frequency work
+	//       Alternatively, use the frequency parser to properly create a text field
 	standardize(sig: any): any {
 		var dosage: any = {
 			resourceType: 'Dosage',
 			// from Element: extension
 			text: sig.text, // Free text dosage instructions e.g. SIG
+			sequence: sig.sequence // The order of the dosage instructions
 		};
 		
 		/* Technique for administering medication */
 		if (sig.method && sig.method.length > 0) dosage.method = sig.method[0].standardized;
-		
-		/* The order of the dosage instructions */
-		if (sig.sequence) dosage.sequence = sig.sequence;
 		
 		/* dose[x]: Amount of medication per dose. One of these 2:
 		"doseRange" : { Range },
@@ -120,7 +116,12 @@ export class SigParser {
 				
 		// When medication should be administered
 		if (sig.frequency && sig.frequency.length > 0 && sig.duration && sig.duration.length > 0) {
-			dosage.timing = Object.assign(sig.frequency[0].standardized, sig.duration[0].standardized)
+			dosage.timing = {
+				repeat: Object.assign(sig.frequency[0].standardized.repeat, sig.duration[0].standardized.repeat),
+				code: {
+					text: sig.frequency[0].standardized.code.text + ' ' + sig.duration[0].standardized.code.text
+				}
+			};
 		} else if (sig.frequency && sig.frequency.length > 0) {
 			dosage.timing = sig.frequency[0].standardized;
 		} else if (sig.duration && sig.duration.length > 0) {
@@ -154,4 +155,11 @@ export class SigParser {
 		return dosage;
 	}
 	
+	getSigText(sig: any): string {
+		return (sig.method ? sig.method.text : '')
+			 + (sig.doseQuantity ? ' ' + sig.doseQuantity.value + (sig.doseQuantity.unit ? ' ' + sig.doseQuantity.unit + (sig.doseQuantity.value > 1 ? 's' : '') : '') : '')
+			 + (sig.doseRange ? ' ' + sig.doseRange.low.value + ' to ' + sig.doseRange.high.value + (sig.doseRange.low.unit ? ' ' + sig.doseRange.low.unit : '') + (sig.doseRange.low.value > 1 || sig.doseRange.high.value ? 's' : '') : '')
+			 + (sig.route ? ' per ' + sig.route.text : '')
+			 + (sig.timing && sig.timing.code ? ' ' + sig.timing.code.text : '');
+	}
 }

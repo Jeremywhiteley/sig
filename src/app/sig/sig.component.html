@@ -9,8 +9,16 @@
 	</form>  
 
 	<div *ngFor="let s of sig; let sequence = index">
-		<pre class="json">{{s.standardized | json}}</pre>
+		<div class="col-xs-8">
+			<pre class="json">{{s.standardized | json}}</pre>
+		</div>
+		<div class="col-xs-4" style="text-align: right;">
+			<div>
+				{{s.stdText}}
+			</div>
+		</div>
 	</div>
+	
 </div>
 
 	  <!--

@@ -51,6 +51,8 @@ export class IndicationParser {
 				}
 			}
 		},
+		/* NOTE: Dosage does not capture indication unless it is a PRN indication
+		NOTE: this should be "reasonCode"
 		{	
 			// for nausea and vomiting (exclude prn before 'for', and exclude numbers immediately after 'for')
 			// asNeededBoolean = false
@@ -72,11 +74,11 @@ export class IndicationParser {
 					});
 				}
 				return {
-					asNeededBoolean: false,
-					asNeededCodeableConcept: reasons
+					reasonCode: reasons
 				}
 			}
 		}
+		*/
 		];
 		
 		return patterns;

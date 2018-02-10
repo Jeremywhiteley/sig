@@ -56,7 +56,7 @@ export class NormalizeService {
 		{ code: 'morn', display: 'morning', synonyms: [ 'morning', 'morn', 'am', 'a.m.' ] },
 		{ code: 'aft', display: 'afternoon', synonyms: [ 'afternoon', 'aft', 'pm', 'p.m.' ] },
 		{ code: 'eve', display: 'evening', synonyms: [ 'evening', 'eve' ] },
-		{ code: 'night', display: 'night', synonyms: [ 'night', 'hs', 'h.s.' ] }				
+		{ code: 'night', display: 'night', synonyms: [ 'nightly', 'night', 'hs', 'h.s.' ] }				
 	];
 
 	// NOTE: periodUnit 'day' should include pretty much all of 'when' array
@@ -71,13 +71,13 @@ export class NormalizeService {
 	a	year	year
 	*/
 	private periodUnit: any[] = [
-		{ code: 'd', display: 'day', synonyms: [ 'days', 'day', 'd', 'morning', 'morn', 'am', 'a.m.', 'afternoon', 'aft', 'pm', 'p.m.', 'evening', 'eve', 'night', 'hs', 'h.s.' ] },
-		{ code: 'wk', dispay: 'week', synonyms: [ 'weeks', 'week', 'wk', 'w\\b' ] },
-		{ code: 'mo', display: 'month', synonyms: [ 'months', 'month', 'mon', 'mo' ] },
-		{ code: 'h', display: 'hour', synonyms: [ 'hours', 'hour', 'hrs', 'hr', 'h\\b' ] },
+		{ code: 'd', display: 'day', synonyms: [ 'daily', 'nightly', 'days', 'day', 'd\\b', 'morning', 'morn', 'am', 'a.m.', 'afternoon', 'aft', 'pm', 'p.m.', 'evening', 'eve', 'night', 'hs', 'h.s.' ] },
+		{ code: 'wk', display: 'week', synonyms: [ 'weekly', 'weeks', 'week', 'wk', 'w\\b' ] },
+		{ code: 'mo', display: 'month', synonyms: [ 'monthly', 'months', 'month', 'mon', 'mo' ] },
+		{ code: 'h', display: 'hour', synonyms: [ 'hourly', 'hours', 'hour', 'hrs', 'hr', 'h\\b' ] },
 		{ code: 'min', display: 'minute', synonyms: [ 'minutes', 'minute', 'mins', 'min', 'm\\b' ] },
-		{ code: 'a', display: 'year', synonyms: [ 'years', 'year', 'yrs', 'yr', 'y\\b' ] },			
-		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's\\b' ] }
+		{ code: 's', display: 'second', synonyms: [ 'seconds', 'second', 'secs', 'sec', 's\\b' ] },
+		{ code: 'a', display: 'year', synonyms: [ 'yearly', 'years', 'year', 'yrs', 'yr', 'y\\b' ] },			
 	];
 
 	// TODO: associate these common codings with each structured frequency
@@ -100,23 +100,33 @@ export class NormalizeService {
 	
 	getRegexDaysOfWeek() { return this.regexDaysOfWeek; }
 	
-	getStandard(o: any[], s: string) {
-		// NOTE: which is faster? indexOf or RegExp?
-		//var r = o.find(i => i.synonyms.indexOf(s.toLowerCase()) > -1);
-		// RegExpExecArray
+	getCode(o: any[], s: string) {
 		var r = o.find(i => new RegExp('(?:\\b' + i.synonyms.join('|') + '\\b)', 'ig').exec(s) ? true : false);
 		return r ? r.code : r;		
 	}
  
+	getDisplayFromCode(o: any[], s: string) {
+		var r = o.find(i => i.code == s);
+		return r ? r.display : r;	
+	}
+ 
 	getWhen(s: string) {
-		return this.getStandard(this.when, s);
+		return this.getCode(this.when, s);
+	}
+	
+	getWhenDisplayFromCode(s: string) {
+		return this.getDisplayFromCode(this.when, s);
 	}
 	
 	getPeriodUnit(s: string) {
-		return this.getStandard(this.periodUnit, s);
+		return this.getCode(this.periodUnit, s);
+	}
+	
+	getPeriodUnitDisplayFromCode(s: string) {
+		return this.getDisplayFromCode(this.periodUnit, s);
 	}
 	
 	getDayOfWeek(s: string) {
-		return this.getStandard(this.dayOfWeek, s);
+		return this.getCode(this.dayOfWeek, s);
 	}
 }
