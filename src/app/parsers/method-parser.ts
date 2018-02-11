@@ -67,7 +67,9 @@ export class MethodParser {
 		{ code: 421805007, display: 'swish' },
 		{ code: 420045007, display: 'suck' },
 		{ code: 420360002, display: 'sniff' },
-		{ code: null, display: 'spray' } // i added this one
+		{ code: 421066005, display: 'place' },
+		{ code: 450851000124103, display: 'spray' },
+		{ code: 450841000124100, display: 'implant' }
 		/*
 		{ code: 420484009, display: 'subtract - dosing instruction fragment' },
 		{ code: 420503003, display: 'as' },
@@ -80,7 +82,6 @@ export class MethodParser {
 		{ code: 420942008, display: 'call' },
 		{ code: 420974001, display: 'when' },
 		{ code: 421035004, display: 'to' },
-		{ code: 421066005, display: 'place' },
 		{ code: 421067001, display: 'then' },
 		{ code: 421206002, display: 'multiply' },
 		{ code: 421286000, display: 'discontinue' },

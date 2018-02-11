@@ -160,6 +160,8 @@ export class SigParser {
 			 + (sig.doseQuantity ? ' ' + sig.doseQuantity.value + (sig.doseQuantity.unit ? ' ' + sig.doseQuantity.unit + (sig.doseQuantity.value > 1 ? 's' : '') : '') : '')
 			 + (sig.doseRange ? ' ' + sig.doseRange.low.value + ' to ' + sig.doseRange.high.value + (sig.doseRange.low.unit ? ' ' + sig.doseRange.low.unit : '') + (sig.doseRange.low.value > 1 || sig.doseRange.high.value ? 's' : '') : '')
 			 + (sig.route ? ' per ' + sig.route.text : '')
-			 + (sig.timing && sig.timing.code ? ' ' + sig.timing.code.text : '');
+			 + (sig.timing && sig.timing.code ? ' ' + sig.timing.code.text : '')
+			 + (sig.asNeededBoolean ? ' as needed' : '')
+			 + (sig.asNeededCodeableConcept ? ' as needed for ' + sig.asNeededCodeableConcept.join(' ') : '');
 	}
 }

@@ -32,6 +32,7 @@ export class IndicationParser {
 			pattern: new RegExp('(?:as needed for|as needed|p.r.n. for|prn for|p.r.n.|prn)\\s*((?:\\w|\\s*)*)', 'ig'),
 			standardize: (match: any[]) => {
 				var reasons = match[1] ? match[1].split(' ') : null;
+				// ISSUE: 'fever/pain' gets captured as only 'fever'
 				// TODO: match each word against a database of diagnoses (ICD-10 / UMLS?)
 				// https://documentation.uts.nlm.nih.gov/rest/search/
 				if (reasons) { 

@@ -119,18 +119,26 @@ export class FrequencyParser {
 		// with | before | after
 		// breakfast | lunch | dinner | meals | each meal
 		// when = a + b (normalize to AC / PC / CM / etc)
+		/*
+		PC	http://hl7.org/fhir/v3/TimingEvent	PC	after meal (from lat. post cibus)
+		PCM	http://hl7.org/fhir/v3/TimingEvent	PCM	after breakfast (from lat. post cibus matutinus)
+		PCD	http://hl7.org/fhir/v3/TimingEvent	PCD	after lunch (from lat. post cibus diurnus)
+		PCV	http://hl7.org/fhir/v3/TimingEvent	PCV	after dinner (from lat. post cibus vespertinus)
+		*/
 		{
-			pattern: new RegExp('(with|before|after)\\s*(breakfast|lunch|dinner|meals|each meal)', 'ig'),
+			pattern: new RegExp('(with|\\a|\\a\\.|before|\\p|\\p\\.|after)?(?: each| every)?\\s?(c\\b|c\\.\\b|meal|c\\.m\\.\\b|cm\\b|breakfast|c\\.d\\.\\b|cd\\b|lunch|c\\.v\\.\\b|cv\\b|dinner)', 'ig'),
 			standardize: (match: any[]) => {
 				// TODO: normalize before to 'a' and after to 'p', etc
 				// TODO: normalize meals to 'm', etc
-				return { 
+				console.log('match', match);
+				var repeat = this.normalize.getWhen((match[1] ? match[1] : '') + (match[2] ? match[2] : ''));
+				return {
 					repeat: { 
-						when: match[1] + match [2] 
+						when: repeat, 
 					},
 					code: {
 						// TODO: fix this when you fix the ac stuff above
-						text: match[1] + ' ' + match[2]
+						text: this.normalize.getWhenDisplayFromCode(repeat)
 					}
 				}
 			}
@@ -221,8 +229,7 @@ export class FrequencyParser {
 					frequencyMax: frequency[1],
 					period: 1,
 					periodUnit: this.normalize.getPeriodUnit(match[2])
-				};					
-				// ISSUE: three to four times a day comes across as only four times a day
+				};		
 				return {
 					repeat: repeat,
 					code: {
@@ -253,7 +260,6 @@ export class FrequencyParser {
 		// Thursday
 		// Monday, Tuesday, Wednesday, and Friday
 		// dayOfWeek = a
-		// ISSUE: only captures last day of multiple days (i.e. will only capture Friday for Monday, Wednesday, and Friday)
 		{
 			pattern: new RegExp('(?:every|on|q)\\s+((?:(?:\\s*(?:and|&|\\+|,)\\s*)*(?:' + regexDaysOfWeek + '))+)', 'ig'),
 			standardize: (match: any[]) => {

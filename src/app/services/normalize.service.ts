@@ -36,27 +36,44 @@ export class NormalizeService {
 	AFT	http://hl7.org/fhir/event-timing	Afternoon	event occurs during the afternoon
 	EVE	http://hl7.org/fhir/event-timing	Evening	event occurs during the evening
 	NIGHT	http://hl7.org/fhir/event-timing	Night	event occurs during the night
+	
 	PHS	http://hl7.org/fhir/event-timing	After Sleep	event occurs [offset] after subject goes to sleep
 	HS	http://hl7.org/fhir/v3/TimingEvent	HS	Description: Prior to beginning a regular period of extended sleep (this would exclude naps). Note that this might occur at different times of day depending on a person's regular sleep schedule.
 	WAKE	http://hl7.org/fhir/v3/TimingEvent	WAKE	Description: Upon waking up from a regular period of sleep, in order to start regular activities (this would exclude waking up from a nap or temporarily waking up during a period of sleep) Usage Notes: e.g. Take pulse rate on waking in management of thyrotoxicosis. Take BP on waking in management of hypertension Take basal body temperature on waking in establishing date of ovulation
+	
 	C	http://hl7.org/fhir/v3/TimingEvent	C	Description: meal (from lat. ante cibus)
 	CM	http://hl7.org/fhir/v3/TimingEvent	CM	Description: breakfast (from lat. cibus matutinus)
 	CD	http://hl7.org/fhir/v3/TimingEvent	CD	Description: lunch (from lat. cibus diurnus)
 	CV	http://hl7.org/fhir/v3/TimingEvent	CV	Description: dinner (from lat. cibus vespertinus)
+	
 	AC	http://hl7.org/fhir/v3/TimingEvent	AC	before meal (from lat. ante cibus)
 	ACM	http://hl7.org/fhir/v3/TimingEvent	ACM	before breakfast (from lat. ante cibus matutinus)
 	ACD	http://hl7.org/fhir/v3/TimingEvent	ACD	before lunch (from lat. ante cibus diurnus)
 	ACV	http://hl7.org/fhir/v3/TimingEvent	ACV	before dinner (from lat. ante cibus vespertinus)
+	
 	PC	http://hl7.org/fhir/v3/TimingEvent	PC	after meal (from lat. post cibus)
 	PCM	http://hl7.org/fhir/v3/TimingEvent	PCM	after breakfast (from lat. post cibus matutinus)
 	PCD	http://hl7.org/fhir/v3/TimingEvent	PCD	after lunch (from lat. post cibus diurnus)
 	PCV	http://hl7.org/fhir/v3/TimingEvent	PCV	after dinner (from lat. post cibus vespertinus)
 	*/
+	// pattern: new RegExp('(with|before|after)\\s*(breakfast|lunch|dinner|meals|each meal)', 'ig'),	
 	private when: any[] = [
 		{ code: 'morn', display: 'morning', synonyms: [ 'morning', 'morn', 'am', 'a.m.' ] },
 		{ code: 'aft', display: 'afternoon', synonyms: [ 'afternoon', 'aft', 'pm', 'p.m.' ] },
 		{ code: 'eve', display: 'evening', synonyms: [ 'evening', 'eve' ] },
-		{ code: 'night', display: 'night', synonyms: [ 'nightly', 'night', 'hs', 'h.s.' ] }				
+		{ code: 'night', display: 'night', synonyms: [ 'nightly', 'night', 'hs', 'h.s.' ] },		
+		{ code: 'c', display: 'with meal', synonyms: [ 'with meal', '\\bc\\b' ] },		
+		{ code: 'cm', display: 'with breakfast', synonyms: [ 'withbreakfast', '\\bcm\\b', 'c\\.m\\.' ] },		
+		{ code: 'cd', display: 'with lunch', synonyms: [ 'withlunch', '\\bcd\\b', 'c\\.d\\.' ] },		
+		{ code: 'cv', display: 'with dinner', synonyms: [ 'withdinner', '\\bcv\\b', 'c\\.v\\.' ] },		
+		{ code: 'ac', display: 'before meal', synonyms: [ 'beforemeal', '\\bac\\b', 'a\\.c\\.' ] },		
+		{ code: 'acm', display: 'before breakfast', synonyms: [ 'beforebreakfast', '\\bacm\\b', 'a\\.c\\.m\\.' ] },		
+		{ code: 'acd', display: 'before lunch', synonyms: [ 'beforelunch', '\\bacd\\b', 'a\\.c\\.d\\.' ] },		
+		{ code: 'acv', display: 'before dinner', synonyms: [ 'beforedinner', '\\bacv\\b', 'a\\.c\\.v\\.' ] },		
+		{ code: 'pc', display: 'after meal', synonyms: [ 'aftermeal', '\\bpc\\b', 'p\\.c\\.' ] },		
+		{ code: 'pcm', display: 'after breakfast', synonyms: [ 'afterbreakfast', '\\bpcm\\b', 'p\\.c\\.m\\.' ] },		
+		{ code: 'pcd', display: 'after lunch', synonyms: [ 'afterlunch', '\\bpcd\\b', 'p\\.c\\.d\\.' ] },		
+		{ code: 'pcv', display: 'after dinner', synonyms: [ 'afterdinner', '\\bpcv\\b', 'p\\.c\\.v\\.' ] },		
 	];
 
 	// NOTE: periodUnit 'day' should include pretty much all of 'when' array

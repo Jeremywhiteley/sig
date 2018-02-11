@@ -47,48 +47,28 @@ export class RouteParser {
 	}
 	
 	private routes: any[] = [
-		{ code: 26643006, display: 'oral route', synonyms: [
-				'by mouth',
-				'orally(?! disintegrating)',
-				'po\\b',
-				'p\\.o\\.',
-				'oral\\b'
-			]
-		},
-		{ code: 34206005, display: 'subcutaneous route', synonyms: [
-				'under the skin',
-				'in the skin',
-				'subcutaneously',
-				'subcutaneous',
-				'subq\\b',
-				'sub\\.q\\.',
-				'sc\\b',
-				's\\.c\\.',
-				'sq\\b',
-				's\\.q\\.'
-			]
-		},
-		{ code: 10547007, display: 'otic route', synonyms: [
-				'by ear',
-				'into (?:right|left|each|both) ear'
-			]
-		},
-		{ code: 12130007, display: 'intra-articular route' },
-		{ code: 127490009, display: 'gastrostomy route' },
-		{ code: 127491008, display: 'jejunostomy route' },
-		{ code: 127492001, display: 'nasogastric route' },
-		{ code: 16857009, display: 'vaginal route', synonyms: [
-				'per the vagina',
-				'vaginally',
-				'in the vagina',
-				'per vagina',
-				'p\\.v\\.',
-				'pv\\b'
-			]
-		},
+		{ code: 26643006, display: 'oral route', synonyms: ['by mouth',	'orally(?! disintegrating)', 'po\\b', 'p\\.o\\.', 'oral\\b'] },
+		{ code: 10547007, display: 'otic route', synonyms: ['by ear', '(?:in to|into|in|to|per) (?:the )?(?:right |left |each |both |affected )*ear', '(?:\\ba\\.u\\.|\\ba\\.s\\.\\b|\\ba\\.d\\.\\b|\\bau\\b|a\\.s\\.)'] },
+		{ code: 46713006, display: 'nasal route', synonyms: ['nasally', '(?:in to|into|in|to|per)?(?: the)?(?: right| left| each| both| affected)? (?:nose|nostril)'] },
+		{ code: 54485002, display: 'ophthalmic route', synonyms: ['ophthalmically', '(?:in to|into|in|to|per)? (?: the)?(?:right |left |each |both |affected )*eye', '(?:\\bo\\.u\\.|\\bo\\.s\\.\\b|\\bo\\.d\\.\\b|\\bou\\b|\\bos\\b|\\bos\\b)'] },
+		{ code: 16857009, display: 'vaginal route', synonyms: ['(?:in to|into|in|to|per)(?: the)? vagina', 'vaginally', 'p\\.v\\.', 'pv\\b'] },
+		{ code: 37839007, display: 'sublingual route', synonyms: ['under the tongue', 'sublingual', 'sublingually', '\\bs\\.l\\.\\b', '\\bsl\\b'] },
+		{ code: 34206005, display: 'subcutaneous route', synonyms: ['(?:in|under) the skin', 'subcutaneous', 'subq\\b', 'sub\\.q\\.', 'sc\\b', 's\\.c\\.', 'sq\\b', 's\\.q\\.'] },
 		{ code: 6064005, display: 'topical route', synonyms: ['(?:to|on) the skin', 'topically', '(?:to|on) affected area'] },
-		{ code: 37161004, display: 'rectal route' },
-		{ code: 372449004, display: 'dental route' },
+		{ code: 37161004, display: 'rectal route', synonyms: ['rectally', 'p\\.r\\.\\b', 'pr\\b'] },
+		{ code: 78421000, display: 'intramuscular route', synonyms: ['i\\.m\\.\\b', '\\bim\\b', 'intramuscular' ] },
+		{ code: 47625008, display: 'intravenous route', synonyms: ['i\\.v\\.', '\\biv\\b', 'intravenous'] },
+		{ code: 448598008, display: 'cutaneous route', synonyms: ['\\bcutaneous'] },
+		{ code: 45890007, display: 'transdermal route', synonyms: ['transdermally'] },
+		{ code: 417985001, display: 'enteral route', synonyms: ['enterally'] },
+		{ code: 127490009, display: 'gastrostomy route', synonyms: ['via g(?:-| )?tube'] },
+		{ code: 127491008, display: 'jejunostomy route', synonyms: ['via j(?:-| )?tube'] },
+		{ code: 127492001, display: 'nasogastric route', synonyms: ['via (?:ng|n\\.g\\.)(?:-| )?tube'] },
+		{ code: 372449004, display: 'dental route', synonyms: ['dentally', 'to(?: the)? teeth'] },
+		{ code: 12130007, display: 'intra-articular route', synonyms: ['(?:in to|into|in|to|per) the joint'] },
+		{ code: 447694001, display: 'respiratory tract route', synonyms: ['nebulize', 'via inhalation'] },
+		/*
+		{ code: 90028008, display: 'urethral route' }
 		{ code: 372450004, display: 'endocervical route' },
 		{ code: 372451000, display: 'endosinusial route' },
 		{ code: 372452007, display: 'endotracheopulmonary route' },
@@ -113,7 +93,6 @@ export class RouteParser {
 		{ code: 372475000, display: 'perineural route' },
 		{ code: 372476004, display: 'subconjunctival route' },
 		{ code: 37737002, display: 'intraluminal route' },
-		{ code: 37839007, display: 'sublingual route' },
 		{ code: 38239002, display: 'intraperitoneal route' },
 		{ code: 404815008, display: 'transmucosal route' },
 		{ code: 404819002, display: 'intrabiliary route' },
@@ -122,7 +101,6 @@ export class RouteParser {
 		{ code: 417070009, display: 'caudal route' },
 		{ code: 417255000, display: 'intraosseous route' },
 		{ code: 417950001, display: 'intrathoracic route' },
-		{ code: 417985001, display: 'enteral route' },
 		{ code: 417989007, display: 'intraductal route' },
 		{ code: 418091004, display: 'intratympanic route' },
 		{ code: 418114005, display: 'intravenous central route' },
@@ -203,24 +181,17 @@ export class RouteParser {
 		{ code: 447122006, display: 'intratumor route' },
 		{ code: 447227007, display: 'transtympanic route' },
 		{ code: 447229005, display: 'transtracheal route' },
-		{ code: 447694001, display: 'respiratory tract route' },
 		{ code: 447964005, display: 'digestive tract route' },
 		{ code: 448077001, display: 'intraepidermal route' },
 		{ code: 448491004, display: 'intrajejunal route' },
 		{ code: 448492006, display: 'intracolonic route' },
-		{ code: 448598008, display: 'cutaneous route' },
-		{ code: 45890007, display: 'transdermal route' },
-		{ code: 46713006, display: 'nasal route' },
-		{ code: 47625008, display: 'intravenous route' },
 		{ code: 54471007, display: 'buccal route' },
-		{ code: 54485002, display: 'ophthalmic route' },
 		{ code: 58100008, display: 'intra-arterial route' },
 		{ code: 60213007, display: 'intramedullary route' },
 		{ code: 62226000, display: 'intrauterine route' },
 		{ code: 697971008, display: 'arteriovenous fistula route' },
 		{ code: 72607000, display: 'intrathecal route' },
-		{ code: 78421000, display: 'intramuscular route' },
-		{ code: 90028008, display: 'urethral route' }
+		*/
   ];
   
   private patterns: any[] = this.getPatterns();

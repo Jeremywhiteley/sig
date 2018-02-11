@@ -41,7 +41,7 @@ export class SigComponent implements OnInit {
 		private sigParser: SigParser
   ) {
     this.sigForm = fb.group({
-      'sigControl':  'apply 1 patch topically every 3 days x 30 days prn pain'
+      'sigControl':  '(Also Known As Deltasone) 3 tablets by mouth daily for 3 day(s) then 2 tablets by mouth daily for 3 day(s) then 1 tablet by mouth daily for 3 day(s)'
 	  /* weird sigs to figure out:
 	  Take 2 tablets on day 1 and 1 tablet on days 2-5 (tricky part is the 'and')
 	  3 tabs p.o. x 1 with food on day 1. Thereafter, 1 tab p.o. t.i.d. with food to complete a 5 day course (tricky part is the 5 day course, and 'thereafter')
