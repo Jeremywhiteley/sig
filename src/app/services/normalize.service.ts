@@ -62,7 +62,7 @@ export class NormalizeService {
 		{ code: 'aft', display: 'afternoon', synonyms: [ 'afternoon', 'aft', 'pm', 'p.m.' ] },
 		{ code: 'eve', display: 'evening', synonyms: [ 'evening', 'eve' ] },
 		{ code: 'night', display: 'night', synonyms: [ 'nightly', 'night', 'hs', 'h.s.' ] },		
-		{ code: 'c', display: 'with meal', synonyms: [ 'with meal', '\\bc\\b' ] },		
+		{ code: 'c', display: 'with meal', synonyms: [ 'with meal' ] },		
 		{ code: 'cm', display: 'with breakfast', synonyms: [ 'withbreakfast', '\\bcm\\b', 'c\\.m\\.' ] },		
 		{ code: 'cd', display: 'with lunch', synonyms: [ 'withlunch', '\\bcd\\b', 'c\\.d\\.' ] },		
 		{ code: 'cv', display: 'with dinner', synonyms: [ 'withdinner', '\\bcv\\b', 'c\\.v\\.' ] },		

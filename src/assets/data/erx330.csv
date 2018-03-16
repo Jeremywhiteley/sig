@@ -1,0 +1,184 @@
+1,buccal
+2,combination
+3,topical (top)
+4,injection
+5,intra-catheter
+6,intramuscular
+7,inhalation
+8,irrigation
+9,intrathecal
+10,intrauterine
+11,intravenous
+12,mouth/throat
+13,nasal
+14,ophthalmic
+15,oral
+16,otic
+17,rectal
+18,subcutaneous
+19,sublingual
+20,transdermal
+21,urethral
+22,vaginal
+23,in vitro
+24,miscellaneous
+25,dental
+27,intravesical irrigation
+28,intra-arterial
+30,intradermal
+32,intraocular
+33,intraperitoneal
+35,nasogastric
+36,topical
+37,translingual
+50,epidural
+51,implant
+52,intra-articular
+53,intracavernosal
+54,intravesical
+55,perfusion
+56,intrapleural
+57,extracorporeal
+59,bladder instillation
+60,each ear
+61,both eyes
+62,caudal block
+63,cervical
+65,CRRT
+67,endotracheal
+68,feeding tube
+69,infiltration
+71,intra-amniotic
+73,intracardiac
+74,intralesional
+75,intraosseous
+76,intraspinal
+77,intrasynovial
+78,intrathoracic
+79,intratracheal
+80,left ear
+81,left eye
+82,nebulization
+83,osteochondrial
+84,other
+85,peg tube
+86,g-tube
+89,j-tube
+91,percutaneous
+96,retrobulbar
+97,right eye
+98,right ear
+99,subconjunctival
+100,sublesionally
+101,swish and spit
+102,swish and swallow
+103,transtracheal
+105,intracavity
+106,mucous membrane
+107,intravitreal
+108,subdermal
+109,transurethral
+110,each nostril
+111,left nostril
+112,right nostril
+113,one nostril
+114,intraventricular
+115,intrapericardial
+117,contin. IV infusion
+118,per nasojejunal tube
+121,continuous infiltration
+122,intravariceal
+123,hemodialysis
+124,periodontal
+125,base of the eyelashes
+126,local infiltration
+127,peg-j tube
+128,intra-urethral
+129,central line irrigation
+130,continuous caudal infusion
+131,continuous epidural
+132,contin.intra-arterial infusion
+133,contin. intraosseous infusion
+134,contin. intrathecal infusion
+135,continuous nebulization
+136,contin. subcutaneous infusion
+137,gums
+138,hand bulb nebulizer
+139,intrabursal
+140,intradetrusor
+141,intraductal
+142,intralumbar
+143,intralymphatic
+144,intraocular injection
+145,intraocular irrigation
+146,juxtascleral
+147,local intranasal application
+148,O2 aerosolization
+149,peribulbar
+150,periodontal pocket
+151,subgingival-local
+152,submucosal anal canal
+153,submucosal injection
+154,sub-tenon
+155,tendon sheath injection
+156,urinary catheter irrigation
+157,venous line irrigation
+158,wound irrigation
+159,laryngotracheal
+160,cytapheresis
+161,hemodialysis port injection
+162,not applicable
+163,IPPB
+164,perineural injection
+165,intratympanic
+167,intravenous push
+168,scalp
+169,continuous intraperitoneal infusion
+170,umbilical
+171,broviac
+172,picc line
+173,cement
+174,intra-ommaya
+175,IPV
+176,for rotoblator
+177,IV (central line)
+178,IV (peripheral line)
+179,per orogastric tube
+180,per gastrojejunal tube
+181,po/ng protocol
+182,pressure line
+183,arterial line
+184,peri-articular
+185,pump
+186,perineal
+187,intracameral
+189,per orojejunal tube
+190,per subarachnoid catheter
+191,per nasoduodenal tube
+192,Soak
+193,Apheresis
+194,via catheter
+195,Instill
+196,ostomy
+197,mucus fistula
+198,abscess
+199,appendicostomy
+200,cecostomy
+201,biliary
+202,cloaca
+203,drainage tube
+204,esophagastric
+205,gastric
+206,nephrostomy
+207,replogle tube
+208,on table
+209,pump prime
+210,intratumoral
+211,intercostal nerve block
+212,plasma exchange
+213,infraclavicular
+214,adductor canal block
+215,interscalene
+216,continuous adductor canal block
+217,continuous infraclavicular
+218,continuous interscalene

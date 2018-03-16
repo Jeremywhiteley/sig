@@ -33,35 +33,44 @@ export class SigComponent implements OnInit {
   sigForm: FormGroup;
   sigControl: AbstractControl;
   
-  sigString: string;
   sig: any[] = [];
+  
+  inputStrings: string[] = [];
+  sigStrings: string[] = [];
 
   constructor(
 		private fb: FormBuilder,
 		private sigParser: SigParser
   ) {
-    this.sigForm = fb.group({
-      'sigControl':  '(Also Known As Deltasone) 3 tablets by mouth daily for 3 day(s) then 2 tablets by mouth daily for 3 day(s) then 1 tablet by mouth daily for 3 day(s)'
-	  /* weird sigs to figure out:
-	  Take 2 tablets on day 1 and 1 tablet on days 2-5 (tricky part is the 'and')
-	  3 tabs p.o. x 1 with food on day 1. Thereafter, 1 tab p.o. t.i.d. with food to complete a 5 day course (tricky part is the 5 day course, and 'thereafter')
 	  
-	  */
+    this.sigForm = fb.group({
+      'sigControl':  ''
+	  // weird sigs to figure out:
+	  // Take 2 tablets on day 1 and 1 tablet on days 2-5 (tricky part is the 'and')
+	  // 3 tabs p.o. x 1 with food on day 1. Thereafter, 1 tab p.o. t.i.d. with food to complete a 5 day course (tricky part is the 5 day course, and 'thereafter')
+	  // Take 1 tablet (25 mg total) by mouth nightly. Start with 1 tablet (25mg) by mouth before bed. Increase by 1 tablet every 5 days until a maximum of 5 tablets (125mg) by mouth (tricky part is increase by x tablet)
     });
 
     this.sigControl = this.sigForm.controls['sigControl'];
 	  
     this.sigControl.valueChanges.subscribe(
       (value: string) => {
-		this.sigString = value;
-	    this.sigParser.parse(this.sigString);
-		this.sig = this.sigParser.getSig();
-      }
+		this.inputStrings = value.split('\n');
+		this.sig = [];
+		
+		this.inputStrings.forEach((s, i) => {
+			this.sigParser.parse(s);
+			this.sig.push(this.sigParser.getSig());
+		});
+
+		}
     );
-	
+
+	/*
 	this.sigString = this.sigControl.value;
 	this.sigParser.parse(this.sigString);
 	this.sig = this.sigParser.getSig();
+	*/
   }
 
   ngOnInit() { } 

@@ -88,7 +88,7 @@ export class DoseParser {
 		
 		patterns.push({
 			// TODO: standardize these mL / mg doseUnits like the ones below
-			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(milligram|microgram|gram|ounce|milliliter|liter|international unit|unit|tablespoonful|tablespoon|teaspoonful|teaspoon|centimeter|\\bcm(?:s)?\\b|tbsp|tsp|iu\\b|un\\b|mcg\\b|mg\\b|gm\\b|g\\b|ml\\b|l\\b))', 'ig'),
+			pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(milligram|microgram|gram|ounce|milliliter|liter|international unit|unit|tablespoonful|tablespoon|teaspoonful|teaspoon|centimeter|milliequivalents|meq\\b|\\bcm(?:s)?\\b|tbsp|tsp|iu\\b|un\\b|mcg\\b|mg\\b|gm\\b|g\\b|ml\\b|l\\b))', 'ig'),
 			standardize: (match: any[]) => {
 				// TODO: maybe standardize tsp / tbsp / ounce / etc to mL?
 				// TODO: add symbol for microgram

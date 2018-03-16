@@ -1,59 +1,36 @@
 <div class="sig-container">
 	<form [formGroup]="sigForm">
 		<div>  
-			<input formControlName="sigControl" 
+			<textarea formControlName="sigControl" 
 			type="text"
 			id="sigControl"  
-			placeholder="type sig">  
+			placeholder="input sigs (separated by line breaks)"></textarea>
 		</div>
 	</form>  
 
-	<div *ngFor="let s of sig; let sequence = index">
-		<div class="col-xs-8">
-			<pre class="json">{{s.standardized | json}}</pre>
-		</div>
-		<div class="col-xs-4" style="text-align: right;">
-			<div style="color:#4CAF50">
-				<strong>{{s.stdText}}</strong>
-			</div>
-		</div>
-	</div>
+	<table class="table">
+	<tbody>
+	<tr *ngFor="let s of sig">
+		<td>
+		<ul>
+			<li *ngFor="let q of s" class="">{{q.text}}</li>
+		</ul>
+		</td>
+		<td style="text-align: right;">
+		<ul>
+			<li *ngFor="let q of s" style="color:#4CAF50">
+				<strong>{{q.stdText}}</strong>
+			</li>
+		</ul>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+	
+	<!--
+take one tablet by mouth daily
+inject 10 units under the skin bid
+	-->
+	
 	
 </div>
-
-	  <!--
-	  Standardized Sig: <a href="https://www.hl7.org/fhir/dosage.html" target="_blank">Dosage</a>
-	  
-	  <div class="col-xs-12"><strong>Sequence {{s.sequence}}:</strong> {{s.text}}</div>
-
-	  <div class="col-xs-2">
-	  Method: <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
-	  <pre *ngFor="let m of s.method">{{m | json}}</pre>
-	  </div>
-	  
-	  <div class="col-xs-2">
-	  Dose: <a href="https://www.hl7.org/fhir/datatypes.html#Range" target="_blank">Range</a> or <a href="https://www.hl7.org/fhir/datatypes.html#SimpleQuantity" target="_blank">SimpleQuantity</a>
-	  <pre *ngFor="let d of s.dose">{{d | json}}</pre>
-	  </div>
-
-	  <div class="col-xs-2">
-	  Route: <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
-	  <pre *ngFor="let r of s.route">{{r | json}}</pre>
-	  </div>
-
-	  <div class="col-xs-2">
-	  Frequency: <a href="https://www.hl7.org/fhir/datatypes.html#Timing" target="_blank">Timing</a> (1/2)
-	  <pre *ngFor="let f of s.frequency">{{f | json}}</pre>
-	  </div>
-
-	  <div class="col-xs-2">
-	  Duration: <a href="https://www.hl7.org/fhir/datatypes.html#Timing" target="_blank">Timing</a> (2/2)
-	  <pre *ngFor="let d of s.duration">{{d | json}}</pre>
-	  </div>
-
-	  <div class="col-xs-2">
-	  Indication: <a href="https://www.hl7.org/fhir/datatypes.html#boolean" target="_blank">Boolean</a> or <a href="https://www.hl7.org/fhir/datatypes.html#CodeableConcept" target="_blank">CodeableConcept</a>
-	  <pre *ngFor="let i of s.indication">{{i | json}}</pre>
-	  </div>
-	  -->
-	  

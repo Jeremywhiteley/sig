@@ -54,7 +54,7 @@ export class DurationParser {
 			standardize: (match: any[]) => {
 				var duration = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				var repeat = {
-					duration: duration.length > 1 ? duration[1] - duration[0] : 1,
+					duration: duration.length > 1 ? duration[1] - duration[0] + 1 : 1,
 					durationUnit: 'd'
 				};
 				return {
@@ -64,7 +64,7 @@ export class DurationParser {
 						text: 'for ' + repeat.duration + ' ' + this.normalize.getPeriodUnitDisplayFromCode(repeat.durationUnit) + (repeat.duration > 1 ? 's' : '')
 					}
 				};
-			}			
+			}
 		},
 		
 		// today

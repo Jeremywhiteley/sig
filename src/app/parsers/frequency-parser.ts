@@ -126,7 +126,7 @@ export class FrequencyParser {
 		PCV	http://hl7.org/fhir/v3/TimingEvent	PCV	after dinner (from lat. post cibus vespertinus)
 		*/
 		{
-			pattern: new RegExp('(with|\\a|\\a\\.|before|\\p|\\p\\.|after)?(?: each| every)?\\s?(c\\b|c\\.\\b|meal|c\\.m\\.\\b|cm\\b|breakfast|c\\.d\\.\\b|cd\\b|lunch|c\\.v\\.\\b|cv\\b|dinner)', 'ig'),
+			pattern: new RegExp('(with|\\a|\\a\\.|before|\\p|\\p\\.|after)(?: each| every)?\\s?(c\\b|c\\.\\b|meal|c\\.m\\.\\b|cm\\b|breakfast|c\\.d\\.\\b|cd\\b|lunch|c\\.v\\.\\b|cv\\b|dinner)', 'ig'),
 			standardize: (match: any[]) => {
 				// TODO: normalize before to 'a' and after to 'p', etc
 				// TODO: normalize meals to 'm', etc
