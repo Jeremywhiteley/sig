@@ -130,7 +130,6 @@ export class FrequencyParser {
 			standardize: (match: any[]) => {
 				// TODO: normalize before to 'a' and after to 'p', etc
 				// TODO: normalize meals to 'm', etc
-				console.log('match', match);
 				var repeat = this.normalize.getWhen((match[1] ? match[1] : '') + (match[2] ? match[2] : ''));
 				return {
 					repeat: { 

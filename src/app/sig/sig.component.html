@@ -1,4 +1,8 @@
-<div class="sig-container">
+<div class="container">
+	<div style="col-xs-12" style="text-align: right; padding: 10px 0;">
+		<a class="btn" href="https://raw.githubusercontent.com/jrlegrand/sig/master/src/assets/data/sigs.csv" target="_blank">Example Sigs</a>
+		<a class="btn" href="https://www.hl7.org/fhir/dosage.html" target="_blank">FHIR Dosage</a>
+	</div>
 	<form [formGroup]="sigForm">
 		<div>  
 			<textarea formControlName="sigControl" 
@@ -8,24 +12,28 @@
 		</div>
 	</form>  
 
-	<table class="table">
-	<tbody>
-	<tr *ngFor="let s of sig">
-		<td>
-		<ul>
-			<li *ngFor="let q of s" class="">{{q.text}}</li>
-		</ul>
-		</td>
-		<td style="text-align: right;">
-		<ul>
-			<li *ngFor="let q of s" style="color:#4CAF50">
-				<strong>{{q.stdText}}</strong>
-			</li>
-		</ul>
-		</td>
-	</tr>
-	</tbody>
-	</table>
+
+	<div class="row" style="border-bottom: 2px #eee solid; margin-bottom: 10px; padding-bottom: 10px;" *ngFor="let s of sig">
+		<div class="col-xs-3">
+			<ul>
+				<li *ngFor="let q of s" class="">{{q.text}}</li>
+			</ul>
+		</div>
+		<div class="col-xs-3">
+			<div *ngFor="let q of s">
+				<div class="col-xs-12" style="color:#4CAF50;">
+					<strong>{{q.stdText}}</strong>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6" style="max-height: 350px; overflow: auto;">
+			<div *ngFor="let q of s">
+				<div class="col-xs-12">
+					<pre class="json">{{q.standardized|json}}</pre>
+				</div>			
+			</div>
+		</div>
+	</div>
 	
 	<!--
 take one tablet by mouth daily
