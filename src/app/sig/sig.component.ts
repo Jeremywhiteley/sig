@@ -61,6 +61,7 @@ export class SigComponent implements OnInit {
 		this.inputStrings.forEach((s, i) => {
 			this.sigParser.parse(s);
 			this.sig.push(this.sigParser.getSig());
+			console.log(this.sig);
 		});
 
 		}

@@ -76,6 +76,8 @@ export class DoseParser {
 		this.doseUnits.map(d => {
 			patterns.push({
 				// TODO: add all possible synonyms and names for dosage forms
+				// TODO: make sure fractions are accounted for
+				// TODO: create a normalize function for converting "one" to "1"
 				pattern: new RegExp('(?<!(?:no more than|do not exceed|not to exceed|\\bnmt|\\bnte)\\s*)\\(*\\**(' + regexRange + ')\\**\\)*(?:\\s*(' + d.display + (d.synonyms ? '|' + d.synonyms.join('|') : '') + '))', 'ig'),
 				standardize: (match: any[]) => {
 					var value = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
@@ -103,10 +105,11 @@ export class DoseParser {
 	
 	private doseUnits: any[] = [
 		/* patch */
-		{ code: 36875001, display: 'drug patch', synonyms: ['(?<!transdermal )patch'] },
+		{ code: 36875001, display: 'drug patch', synonyms: ['(?<!transdermal ) patch'] },
 		{ code: 385114002, display: 'transdermal patch' },
 		/* tablet */
 		// TODO: add all synonyms to exclusion for tablet
+		// ERROR: make sure "tablespoon" does not match on "tab" -- use a negative lookahead
 		{ code: 385055001, display: 'tablet', synonyms: ['(?<!film-coated |effervescentgastro-resistant |orodispersible |prolonged-release |vaginal |effervescent vaginal |modified-release |chewable |sublingual |buccalmuco-adhesive buccal |soluble |dispersible |delayed-release particles |oral |inhalation vapor |implantation |extended-release film coated |ultramicronized |extended-release |extended-release enteric coated |delayed-release |coated particles |sustained-release buccal |multilayer )tab'] },
 		{ code: 385057009, display: 'film-coated tablet', synonyms: ['(?:film-coated|film coated) tab'] },
 		{ code: 385058004, display: 'effervescent tablet', synonyms: ['effervescent tab'] },
@@ -116,7 +119,7 @@ export class DoseParser {
 		{ code: 385178005, display: 'vaginal tablet', synonyms: ['vaginal tab'] },
 		{ code: 385179002, display: 'effervescent vaginal tablet', synonyms: ['effervescent vaginal tab'] },
 		{ code: 385061003, display: 'modified-release tablet', synonyms: ['(?:modified-release|modified release) tab'] },
-		{ code: 66076007, display: 'chewable tablet', synonyms: ['chewable tab'] },
+		{ code: 66076007, display: 'chewable tablet', synonyms: ['chewable tab', 'chewable'] },
 		{ code: 385084005, display: 'sublingual tablet', synonyms: ['(?:sublingual|s.l.|sl) tab'] },
 		{ code: 385085006, display: 'buccal tablet', synonyms: ['buccal tab'] },
 		{ code: 385086007, display: 'muco-adhesive buccal tablet', synonyms: ['(?:muco-adhesive|muco adhesive) buccal tab'] },
@@ -185,7 +188,7 @@ export class DoseParser {
 		{ code: 385279006, display: 'cutaneous suspension spray' },
 		{ code: 385106008, display: 'cutaneous solution spray' },
 		/* inhalation */
-		{ code: 385203008, display: 'pressurised inhalation', synonyms: ['inhalation', 'puff'] },
+		{ code: 385203008, display: 'pressurised inhalation', synonyms: ['inhalation', 'puff', '\\bpuf\\b'] },
 		{ code: 385204002, display: 'pressurised inhalation solution' },
 		{ code: 385205001, display: 'pressurised inhalation suspension' },
 		{ code: 385206000, display: 'pressurised inhalation emulsion' },
@@ -199,7 +202,7 @@ export class DoseParser {
 		/* aerosol */
 		{ code: 424179000, display: 'aerosol generator' },
 		{ code: 421759004, display: 'metered dose aerosol inhaler' },
-		{ code: 420610000, display: 'nasal aerosol' },
+		{ code: 420610000, display: 'nasal aerosol', synonyms: ['nasal spray'] },
 		{ code: 421104008, display: 'aerosol powder' },
 		{ code: 421347001, display: 'cutaneous aerosol' },
 		{ code: 420847003, display: 'metered dose aerosol' },
@@ -223,7 +226,7 @@ export class DoseParser {
 		/* inhaler */
 		{ code: 420317006, display: 'inhaler' },
 		{ code: 422054001, display: 'metered dose powder inhaler' },
-		{ code: 422059006, display: 'metered dose inhaler' },
+		{ code: 422059006, display: 'metered dose inhaler', synonyms: ['MDI', 'M.D.I.'] },
 		{ code: 422151007, display: 'breath activated powder inhaler' },
 		{ code: 422197009, display: 'breath activated inhaler' },
 		/* stick */
@@ -296,6 +299,12 @@ export class DoseParser {
 		{ code: 429885007, display: 'bar' },
 		{ code: 443424002, display: 'buccal film' },
 		{ code: 447050008, display: 'orodispersible film' },
+		{ display: 'pen' },
+		{ display: 'applicatorful' },
+		{ display: 'application' },
+		{ display: 'capful' },
+		{ display: 'injection' },
+		{ display: 'packet' },
 	];
 	
 	private patterns: any[] = this.getPatterns();
@@ -307,8 +316,6 @@ export class DoseParser {
 	'(?:extended release|delayed release|buccal|sustained release buccal|chewable|disintegrating|enteric coated|extended release enteric coated|sublingual|vaginal)?\\s*(?:oral)?\\s*tablet',
 	'spray',
 	'actuation',
-	'applicatorful',
-	'capful',
 	'puff',
 	'drop',
 	'bar',

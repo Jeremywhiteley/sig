@@ -48,14 +48,14 @@ export class RouteParser {
 	
 	// eStar system = urn:oid:1.2.840.114350.1.13.478.2.7.4.698288.330
 	private routes: any[] = [
-		{ code: 26643006, epic: 15, display: 'oral route', synonyms: ['by mouth',	'orally(?! disintegrating)', 'po\\b', 'p\\.o\\.', 'oral\\b'] },
+		{ code: 26643006, epic: 15, display: 'oral route', synonyms: ['by mouth', 'on (?:the )?tongue', 'orally(?! disintegrating)', 'po\\b', 'p\\.o\\.', 'oral\\b'] },
 		{ code: 10547007, epic: 16, display: 'otic route', synonyms: ['by ear', '(?:in to|into|in|to|per) (?:the )?(?:right |left |each |both |affected )*ear', '(?:\\ba\\.u\\.|\\ba\\.s\\.\\b|\\ba\\.d\\.\\b|\\bau\\b|a\\.s\\.)'] },
 		{ code: 46713006, epic: 13, display: 'nasal route', synonyms: ['nasally', '(?:in to|into|in|to|per)?(?: the)?(?: right| left| each| both| affected)? (?:nose|nostril)'] },
 		{ code: 54485002, epic: 14, display: 'ophthalmic route', synonyms: ['ophthalmically', '(?:in to|into|in|to|per)? (?: the)?(?:right |left |each |both |affected )*eye', '(?:\\bo\\.u\\.|\\bo\\.s\\.\\b|\\bo\\.d\\.\\b|\\bou\\b|\\bos\\b|\\bos\\b)'] },
 		{ code: 16857009, epic: 22, display: 'vaginal route', synonyms: ['(?:in to|into|in|to|per)(?: the)? vagina', 'vaginally', 'p\\.v\\.', 'pv\\b'] },
-		{ code: 37839007, epic: 19, display: 'sublingual route', synonyms: ['under the tongue', 'sublingual', 'sublingually', '\\bs\\.l\\.\\b', '\\bsl\\b'] },
-		{ code: 34206005, epic: 18, display: 'subcutaneous route', synonyms: ['(?:in|under) the skin', 'subcutaneous', 'subq\\b', 'sub\\.q\\.', 'sc\\b', 's\\.c\\.', 'sq\\b', 's\\.q\\.'] },
-		{ code: 6064005, epic: 36, display: 'topical route', synonyms: ['(?:to|on) the skin', 'topically', '(?:to|on) affected area'] },
+		{ code: 37839007, epic: 19, display: 'sublingual route', synonyms: ['under the tongue', 'sub(?: |-)?lingual', '\\bs\\.l\\.\\b', '\\bsl\\b'] },
+		{ code: 34206005, epic: 18, display: 'subcutaneous route', synonyms: ['(?:in|under) the skin', 'sub(?: |-)*cutaneous(?:ly)?', 'subq\\b', 'sub\\.q\\.', 'sc\\b', 's\\.c\\.', 'sq\\b', 's\\.q\\.'] },
+		{ code: 6064005, epic: 36, display: 'topical route', synonyms: ['(?:to|on)(?: the)? skin', '(?:cleaned|clean|dry) skin', 'topical', '(?:to|on) affected area'] },
 		{ code: 37161004, epic: 17, display: 'rectal route', synonyms: ['rectally', 'p\\.r\\.\\b', 'pr\\b', 'in(?:to)* the (?:butt|anus|rectum)'] },
 		{ code: 78421000, epic: 6, display: 'intramuscular route', synonyms: ['i\\.m\\.\\b', '\\bim\\b', 'intramuscular', 'in(?:to)* the muscle' ] },
 		{ code: 47625008, epic: 11, display: 'intravenous route', synonyms: ['i\\.v\\.', '\\biv\\b', 'intravenous'] },
@@ -67,7 +67,7 @@ export class RouteParser {
 		{ code: 127492001, epic: 35, display: 'nasogastric route', synonyms: ['via (?:ng|n\\.g\\.)(?:-| )?tube'] },
 		{ code: 372449004, epic: 25, display: 'dental route', synonyms: ['dentally', 'to(?: the)? teeth'] },
 		{ code: 12130007, epic: 52, display: 'intra-articular route', synonyms: ['(?:in to|into|in|to|per) the joint'] },
-		{ code: 447694001, epic: 7, display: 'respiratory tract route', synonyms: ['nebulize', 'via inhalation'] },
+		{ code: 447694001, epic: 7, display: 'respiratory tract route', synonyms: ['nebulize', 'via inhalation', 'inhalation'] },
 		{ code: 90028008, epic: 21, display: 'urethral route', synonyms: ['into urethra', 'urethrally', 'via urethra'] },
 		/*
 		{ code: 372450004, display: 'endocervical route' },

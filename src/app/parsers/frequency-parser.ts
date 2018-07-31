@@ -50,11 +50,11 @@ export class FrequencyParser {
 
 		// q | every | each
 		// 4 | 4-6 | 4 to 6 | four | four-six | four to six
-		// hours | days | weeks | h | hrs | hr | min | mins
+		// hours | days | weeks | months | h | hrs | hr | min | mins | mon
 		// (a: normalize 'to' to '-', and explode)
 		// frequency = 1, period = a[0], periodUnit = b (normalize to h, d, wk, min), [periodMax = a[1]]
 		{
-			pattern: new RegExp('(?:q|every|each)\\s*\\(*\\**(' + regexRange + ')\\**\\)*\\s*(hour|day|d\\b|week|h\\b|hrs\\b|hr\\b|min)', 'ig'),
+		pattern: new RegExp('(?:q|every|each)\\s*\\(*\\**(' + regexRange + ')\\**\\)*\\s*(month|mon|hour|day|d\\b|week|h\\b|hrs\\b|hr\\b|min)', 'ig'),
 			standardize: (match: any[]) => {
 				var period = match[1].replace(/(?:to|or)/ig, '-').replace(/\s/g, '').split('-');
 				var repeat = {
@@ -204,7 +204,7 @@ export class FrequencyParser {
 				return {
 					repeat: repeat,
 					code: {
-						text: 'one time per ' + (repeat.when ? repeat.when : this.normalize.getPeriodUnitDisplayFromCode(repeat.periodUnit))
+						text: '1 time per ' + (repeat.when ? repeat.when : this.normalize.getPeriodUnitDisplayFromCode(repeat.periodUnit))
 					}
 				}
 			}
@@ -270,6 +270,18 @@ export class FrequencyParser {
 					},
 					code: {
 						text: 'every ' + day.join(', ')
+					}
+				}
+			}
+		},
+		
+		// as directed
+		{
+			pattern: new RegExp('as directed', 'ig'),
+			standardize: (match: any[]) => {				
+				return {
+					code: {
+						text: 'as directed'
 					}
 				}
 			}
